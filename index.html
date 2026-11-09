@@ -105,42 +105,42 @@
 
   <!-- Header Navigation -->
   <header class="relative z-10 border-b border-slate-200 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/70 backdrop-blur-md sticky top-0 transition-colors duration-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 min-h-[4.25rem] sm:h-20 py-2 sm:py-0 flex items-center justify-between gap-2 sm:gap-4">
       
       <!-- Brand Logo & Identity -->
-      <div class="flex items-center gap-3.5">
-        <div class="h-11 w-11 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center shadow-lg shadow-blue-500/20 ring-1 ring-white/20">
-          <i class="fa-solid fa-cubes-stacked text-white text-lg"></i>
+      <div class="flex items-center gap-2.5 sm:gap-3.5 min-w-0">
+        <div class="h-9 w-9 sm:h-11 sm:w-11 shrink-0 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center shadow-md sm:shadow-lg shadow-blue-500/20 ring-1 ring-white/20">
+          <i class="fa-solid fa-cubes-stacked text-white text-sm sm:text-lg"></i>
         </div>
-        <div>
-          <div class="flex items-center gap-2">
+        <div class="min-w-0">
+          <div class="flex items-center gap-1.5 sm:gap-2">
             <a 
               href="https://www.linkedin.com/in/adi-pranata-86449658/" 
               target="_blank" 
               rel="noopener noreferrer" 
-              class="font-bold text-lg tracking-tight text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors inline-flex items-center gap-1.5 group"
+              class="font-bold text-sm sm:text-base md:text-lg tracking-tight text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors inline-flex items-center gap-1 group truncate"
               title="Kunjungi Profil LinkedIn Adi Pranata"
             >
-              <span>Adi Pranata Systems</span>
-              <i class="fa-brands fa-linkedin text-[#0a66c2] text-sm group-hover:scale-110 transition-transform"></i>
+              <span class="truncate">Adi Pranata Systems</span>
+              <i class="fa-brands fa-linkedin text-[#0a66c2] text-xs sm:text-sm group-hover:scale-110 transition-transform shrink-0"></i>
             </a>
-            <span class="px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">Hub v2.7</span>
+            <span class="hidden sm:inline-flex px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 shrink-0">v2.7</span>
           </div>
-          <div class="flex items-center gap-2">
-            <p class="text-xs text-slate-500 dark:text-slate-400">Pusat Akses Sistem Kerja</p>
-            <span class="text-slate-400 text-xs">&bull;</span>
-            <!-- Active Role Badge -->
-            <button onclick="openRoleModal()" class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 text-[11px] font-semibold hover:bg-amber-500/20 transition-all" title="Klik untuk mengubah profil peran">
-              <i class="fa-solid fa-id-badge text-[10px]"></i>
-              <span id="active-role-display">Master (Semua Sistem)</span>
-              <i class="fa-solid fa-chevron-down text-[9px] ml-0.5"></i>
+          <div class="flex items-center gap-1.5 mt-0.5">
+            <p class="hidden sm:inline text-xs text-slate-500 dark:text-slate-400 shrink-0">Pusat Akses Sistem Kerja</p>
+            <span class="hidden sm:inline text-slate-400 text-xs">&bull;</span>
+            <!-- Active Role Badge (Compact & Responsive on mobile) -->
+            <button onclick="openRoleModal()" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 text-[10px] sm:text-[11px] font-semibold hover:bg-amber-500/20 transition-all max-w-[160px] sm:max-w-none" title="Klik untuk mengubah profil peran">
+              <i class="fa-solid fa-id-badge text-[9px] shrink-0"></i>
+              <span id="active-role-display" class="truncate">Master (Semua Sistem)</span>
+              <i class="fa-solid fa-chevron-down text-[8px] ml-0.5 shrink-0"></i>
             </button>
           </div>
         </div>
       </div>
 
       <!-- Actions: Role Selector, Theme Toggle, Install PWA & Live Clock -->
-      <div class="flex items-center gap-2.5 sm:gap-4">
+      <div class="flex items-center gap-1.5 sm:gap-3 shrink-0">
         <!-- Live Clock & Status (Desktop) -->
         <div class="hidden lg:flex items-center gap-3 border-r border-slate-200 dark:border-slate-800 pr-4">
           <div class="text-right">
@@ -149,34 +149,34 @@
           </div>
         </div>
 
-        <!-- Role Switcher Button -->
+        <!-- Role Switcher Button (Desktop/Tablet only, mobile uses the active role badge) -->
         <button 
           onclick="openRoleModal()"
-          class="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700/80 transition-all shadow-sm"
+          class="hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700/80 transition-all shadow-sm"
           title="Ubah Divisi / Peran Pengguna"
         >
           <i class="fa-solid fa-users-gear text-blue-500"></i>
-          <span class="hidden md:inline">Ganti Divisi</span>
+          <span>Ganti Divisi</span>
         </button>
 
         <!-- PWA Install Button (Dynamic) -->
         <button 
           id="pwa-install-btn" 
-          class="hidden items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/30 hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-all shadow-sm"
+          class="hidden items-center justify-center h-8 w-8 sm:h-auto sm:w-auto sm:px-3 sm:py-2 rounded-xl text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/30 hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-all shadow-sm shrink-0"
           title="Install Portal sebagai Aplikasi"
         >
           <i class="fa-solid fa-download"></i>
-          <span class="hidden sm:inline">Install App</span>
+          <span class="hidden md:inline ml-1.5">Install App</span>
         </button>
 
         <!-- Theme Toggle Button -->
         <button 
           id="theme-toggle" 
-          class="h-10 w-10 rounded-xl flex items-center justify-center bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-amber-400 border border-slate-200 dark:border-slate-700/80 transition-all shadow-sm" 
+          class="h-8 w-8 sm:h-10 sm:w-10 rounded-xl flex items-center justify-center bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-amber-400 border border-slate-200 dark:border-slate-700/80 transition-all shadow-sm shrink-0" 
           title="Ganti Tema (Dark / Light)"
           aria-label="Ganti Tema"
         >
-          <i id="theme-toggle-icon" class="fa-solid fa-sun text-base"></i>
+          <i id="theme-toggle-icon" class="fa-solid fa-sun text-sm sm:text-base"></i>
         </button>
       </div>
 
