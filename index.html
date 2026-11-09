@@ -50,7 +50,6 @@
     }
   </script>
   <style>
-    /* Custom Scrollbar */
     ::-webkit-scrollbar {
       width: 8px;
       height: 8px;
@@ -100,7 +99,7 @@
   <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
     <div class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-700 shadow-2xl">
       <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-500 text-lg"></i>
-      <span id="toast-message" class="text-sm font-medium">Link berhasil disalin!</span>
+      <span id="toast-message" class="text-sm font-medium">Berhasil</span>
     </div>
   </div>
 
@@ -116,28 +115,40 @@
         <div>
           <div class="flex items-center gap-2">
             <span class="font-bold text-lg tracking-tight text-slate-900 dark:text-white">Adi Pranata Systems</span>
-            <span class="px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">Hub v2.5</span>
+            <span class="px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">Hub v2.7</span>
           </div>
-          <p class="text-xs text-slate-500 dark:text-slate-400">Integrated Web Portals & Workflow Tools</p>
+          <div class="flex items-center gap-2">
+            <p class="text-xs text-slate-500 dark:text-slate-400">Pusat Akses Sistem Kerja</p>
+            <span class="text-slate-400 text-xs">&bull;</span>
+            <!-- Active Role Badge -->
+            <button onclick="openRoleModal()" class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 text-[11px] font-semibold hover:bg-amber-500/20 transition-all" title="Klik untuk mengubah profil peran">
+              <i class="fa-solid fa-id-badge text-[10px]"></i>
+              <span id="active-role-display">Master (Semua Sistem)</span>
+              <i class="fa-solid fa-chevron-down text-[9px] ml-0.5"></i>
+            </button>
+          </div>
         </div>
       </div>
 
-      <!-- Actions: Theme Toggle, Install PWA & Live Clock -->
-      <div class="flex items-center gap-3 sm:gap-5">
+      <!-- Actions: Role Selector, Theme Toggle, Install PWA & Live Clock -->
+      <div class="flex items-center gap-2.5 sm:gap-4">
         <!-- Live Clock & Status (Desktop) -->
-        <div class="hidden lg:flex items-center gap-4 border-r border-slate-200 dark:border-slate-800 pr-5">
-          <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/50 text-xs">
-            <span class="relative flex h-2 w-2">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-            </span>
-            <span class="text-slate-700 dark:text-slate-300 font-medium">7 Portal Online</span>
-          </div>
+        <div class="hidden lg:flex items-center gap-3 border-r border-slate-200 dark:border-slate-800 pr-4">
           <div class="text-right">
             <div id="live-clock" class="text-xs font-semibold tracking-wide text-slate-800 dark:text-slate-200">00:00:00 WIB</div>
             <div id="live-date" class="text-[10px] text-slate-500 dark:text-slate-400">Senin, 1 Jan 2026</div>
           </div>
         </div>
+
+        <!-- Role Switcher Button -->
+        <button 
+          onclick="openRoleModal()"
+          class="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700/80 transition-all shadow-sm"
+          title="Ubah Divisi / Peran Pengguna"
+        >
+          <i class="fa-solid fa-users-gear text-blue-500"></i>
+          <span class="hidden md:inline">Ganti Divisi</span>
+        </button>
 
         <!-- PWA Install Button (Dynamic) -->
         <button 
@@ -163,6 +174,19 @@
     </div>
   </header>
 
+  <!-- Role Notice Banner (Appears when filtered by role) -->
+  <div id="role-notice-banner" class="hidden bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs py-2 px-4 shadow-inner">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-filter text-amber-300"></i>
+        <span>Portal difilter untuk peran: <strong id="role-banner-title">Warehouse Admin</strong>. Hanya menampilkan modul terkait divisi Anda.</span>
+      </div>
+      <button onclick="setRoleFilter('all')" class="underline hover:text-amber-200 font-semibold text-[11px] ml-4">
+        Tampilkan Semua Modul (Master)
+      </button>
+    </div>
+  </div>
+
   <!-- Main Content Container -->
   <main class="relative z-10 flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
     
@@ -174,24 +198,20 @@
           <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             Pusat Akses Sistem & Aplikasi
           </h1>
-          <p class="mt-2 text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
-            Satu pintu masuk untuk seluruh modul operasional workshop, asesmen rekrutmen tim KTC, dan submission publikasi ilmiah.
+          <p class="mt-2 text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed" id="hero-subtitle">
+            Satu pintu masuk terintegrasi untuk monitoring gudang, pelaporan breakdown workshop, dan seleksi rekrutmen tim KTC.
           </p>
         </div>
 
         <!-- Quick Summary Metrics -->
         <div class="flex items-center gap-3">
           <div class="px-4 py-3 rounded-xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700/70 text-center min-w-[90px] shadow-sm">
-            <span class="text-xl font-bold text-blue-600 dark:text-blue-400">3</span>
-            <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Kategori</p>
+            <span id="metric-accessible" class="text-xl font-bold text-blue-600 dark:text-blue-400">7</span>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Modul Aktif</p>
           </div>
           <div class="px-4 py-3 rounded-xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700/70 text-center min-w-[90px] shadow-sm">
-            <span class="text-xl font-bold text-emerald-600 dark:text-emerald-400">7</span>
-            <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Sistem Siap</p>
-          </div>
-          <div class="px-4 py-3 rounded-xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700/70 text-center min-w-[90px] shadow-sm">
-            <span class="text-xl font-bold text-amber-500 dark:text-amber-400">GitHub</span>
-            <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Hosting Hub</p>
+            <span id="metric-role" class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block mt-1">MASTER</span>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium mt-1">Hak Akses</p>
           </div>
         </div>
       </div>
@@ -232,7 +252,7 @@
           <input 
             type="text" 
             id="search-input" 
-            placeholder="Cari sistem, tes, atau tag... (Tekan '/' untuk fokus)" 
+            placeholder="Cari modul atau sistem... (Tekan '/' untuk fokus)" 
             class="w-full pl-10 pr-10 py-2.5 rounded-xl bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm"
           />
           <button 
@@ -298,7 +318,7 @@
         <!-- Rendered dynamically -->
       </div>
 
-      <!-- Table/List Container (Hidden by default) -->
+      <!-- Table/List Container -->
       <div id="systems-table-wrap" class="hidden overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-800/60 backdrop-blur-md shadow-sm">
         <div class="overflow-x-auto">
           <table class="w-full text-left text-sm">
@@ -324,9 +344,9 @@
         <i class="fa-solid fa-folder-open"></i>
       </div>
       <h3 class="text-base font-semibold text-slate-800 dark:text-slate-200">Tidak ada sistem ditemukan</h3>
-      <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-sm mx-auto">Coba gunakan kata kunci lain atau ubah kategori filter di bagian atas.</p>
+      <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-sm mx-auto" id="empty-state-text">Modul tidak tersedia untuk peran ini atau kata kunci tidak sesuai.</p>
       <button onclick="resetFilters()" class="mt-4 px-4 py-2 text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 hover:bg-blue-100 dark:hover:bg-blue-500/20 border border-blue-200 dark:border-blue-500/30 rounded-xl transition-all">
-        Reset Pencarian
+        Reset Pencarian & Tampilkan Semua
       </button>
     </div>
 
@@ -340,7 +360,7 @@
         <span>Built by <strong>Adi Pranata</strong> &bull; Internal Systems Registry</span>
       </div>
       <div class="flex items-center gap-4">
-        <span>PWA Ready &bull; GitHub Pages</span>
+        <span>Role-Based PWA Hub</span>
         <span>&bull;</span>
         <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="hover:text-slate-800 dark:hover:text-slate-200 transition-colors">
           Kembali ke atas <i class="fa-solid fa-arrow-up ml-1"></i>
@@ -349,7 +369,50 @@
     </div>
   </footer>
 
-  <!-- Quick Info / Modal Guide -->
+  <!-- Modal: Role Selector & Shareable URL Generator -->
+  <div id="role-modal" class="fixed inset-0 z-50 bg-black/60 dark:bg-black/75 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+      <button onclick="closeRoleModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-white p-2">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-blue-600/10 text-blue-600 dark:text-blue-400 flex items-center justify-center text-lg">
+          <i class="fa-solid fa-id-badge"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white">Pilih Profil Divisi / Peran</h3>
+          <p class="text-xs text-slate-500 dark:text-slate-400">Atur modul apa saja yang tampil di portal ini.</p>
+        </div>
+      </div>
+
+      <div class="space-y-2.5 my-4" id="role-option-list">
+        <!-- Populated dynamically -->
+      </div>
+
+      <div class="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700">
+        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Tautan Khusus untuk Dibagikan ke Tim:</label>
+        <div class="flex items-center gap-2">
+          <input 
+            type="text" 
+            id="shareable-role-link" 
+            readonly 
+            class="w-full text-xs bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-2 text-slate-600 dark:text-slate-300 font-mono select-all" 
+          />
+          <button 
+            onclick="copyShareableRoleLink()" 
+            class="px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-medium shrink-0 flex items-center gap-1.5"
+            title="Salin Tautan Divisi"
+          >
+            <i class="fa-regular fa-copy"></i>
+            <span>Salin</span>
+          </button>
+        </div>
+        <p class="text-[11px] text-slate-400 mt-1">Kirim tautan ini via WhatsApp/Telegram agar tim langsung masuk dengan tampilan yang sesuai.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Info / Detail Modal -->
   <div id="info-modal" class="fixed inset-0 z-50 bg-black/60 dark:bg-black/75 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
       <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-white p-2">
@@ -372,7 +435,7 @@
         </div>
       </div>
       <div class="mt-6 flex gap-3">
-        <a id="modal-launch-btn" href="#" target="_blank" rel="noopener noreferrer" onclick="trackLaunchFromModal()" class="flex-1 py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-center text-sm shadow-md transition-all">
+        <a id="modal-launch-btn" href="#" target="_blank" rel="noopener noreferrer" class="flex-1 py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-center text-sm shadow-md transition-all">
           Buka Sistem Sekarang <i class="fa-solid fa-arrow-up-right-from-square ml-1.5 text-xs"></i>
         </a>
         <button onclick="closeModal()" class="py-2.5 px-4 rounded-xl bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 text-sm font-medium">
@@ -382,9 +445,39 @@
     </div>
   </div>
 
-  <!-- Application Logic & PWA Registration -->
+  <!-- Application Logic & RBAC Engine -->
   <script>
-    // System registry dataset
+    // ==========================================
+    // ROLE DEFINITIONS & CONFIGURATION
+    // ==========================================
+    const ROLE_CONFIG = {
+      all: { 
+        label: "Master (Semua Sistem)", 
+        icon: "fa-solid fa-crown", 
+        color: "text-amber-500",
+        description: "Akses menyeluruh ke seluruh sistem & modul"
+      },
+      warehouse_admin: { 
+        label: "Warehouse Admin", 
+        icon: "fa-solid fa-warehouse", 
+        color: "text-blue-500",
+        description: "Monitoring dispensing oli & logistik gudang"
+      },
+      workshop_admin: { 
+        label: "Workshop Admin", 
+        icon: "fa-solid fa-screwdriver-wrench", 
+        color: "text-cyan-500",
+        description: "Konversi laporan breakdown unit ke Telegram"
+      },
+      hr: { 
+        label: "HR & Rekrutmen", 
+        icon: "fa-solid fa-user-check", 
+        color: "text-emerald-500",
+        description: "Portal asesmen ujian online & rekrutmen tim KTC"
+      }
+    };
+
+    // System registry dataset with Role Mapping (allowedRoles)
     const SYSTEMS_DATA = [
       {
         id: "bd_converter",
@@ -395,8 +488,9 @@
         description: "Alat konversi dan standardisasi laporan breakdown unit workshop menjadi format pesan Telegram yang siap broadcast secara instan.",
         icon: "fa-solid fa-wrench",
         color: "from-blue-600 to-indigo-600",
-        badge: "Operasional",
-        tags: ["breakdown", "telegram", "converter", "unit", "workshop", "laporan"]
+        badge: "Workshop",
+        tags: ["breakdown", "telegram", "converter", "unit", "workshop", "laporan"],
+        allowedRoles: ["all", "workshop_admin"]
       },
       {
         id: "log_dispense",
@@ -407,8 +501,9 @@
         description: "Sistem pencatatan terpusat, kontrol kuota, dan monitoring distribusi dispensing pelumas/oli serta consumable unit KTC.",
         icon: "fa-solid fa-gas-pump",
         color: "from-cyan-600 to-blue-600",
-        badge: "Logistik & Oli",
-        tags: ["log", "dispense", "oli", "fuel", "pelumas", "ktc", "monitoring"]
+        badge: "Warehouse",
+        tags: ["log", "dispense", "oli", "fuel", "pelumas", "ktc", "warehouse"],
+        allowedRoles: ["all", "warehouse_admin"]
       },
       {
         id: "recruitment_ktc",
@@ -419,20 +514,22 @@
         description: "Pintu utama pendaftaran berkas kandidat pelamar, administrasi data pelamar, dan screening awal rekrutmen tim KTC.",
         icon: "fa-solid fa-user-plus",
         color: "from-emerald-600 to-teal-600",
-        badge: "Perekrutan",
-        tags: ["recruitment", "rekrutmen", "hr", "kandidat", "pelamar", "ktc", "lowongan"]
+        badge: "Rekrutmen",
+        tags: ["recruitment", "rekrutmen", "hr", "kandidat", "pelamar", "ktc", "lowongan"],
+        allowedRoles: ["all", "hr"]
       },
       {
         id: "ujian_admin",
         title: "Ujian Seleksi Admin",
         category: "hr",
         categoryLabel: "HR & Asesmen",
-        url: "https://adipranata-system.github.io/Ujian-KTC/",
+        url: "https://adipranata-system.github.io/UjianAdm-KTC/",
         description: "Portal asesmen online dan evaluasi kompetensi tertulis calon staf administrasi, pengarsipan, dan tata kelola kantor KTC.",
         icon: "fa-solid fa-file-signature",
         color: "from-emerald-500 to-green-600",
         badge: "Tes Admin",
-        tags: ["ujian", "admin", "administrasi", "tes", "seleksi", "ktc", "soal"]
+        tags: ["ujian", "admin", "administrasi", "tes", "seleksi", "ktc", "soal"],
+        allowedRoles: ["all", "hr"]
       },
       {
         id: "ujian_operator",
@@ -444,7 +541,8 @@
         icon: "fa-solid fa-truck-monster",
         color: "from-teal-600 to-emerald-700",
         badge: "Tes Operator",
-        tags: ["operator", "ujian", "alat berat", "p2h", "safety", "tes", "ktc"]
+        tags: ["operator", "ujian", "alat berat", "p2h", "safety", "tes", "ktc"],
+        allowedRoles: ["all", "hr"]
       },
       {
         id: "ujian_mechanic",
@@ -456,7 +554,8 @@
         icon: "fa-solid fa-gears",
         color: "from-cyan-600 to-teal-700",
         badge: "Tes Mechanic",
-        tags: ["mechanic", "mekanik", "teknisi", "troubleshooting", "ujian", "tes", "ktc"]
+        tags: ["mechanic", "mekanik", "teknisi", "troubleshooting", "ujian", "tes", "ktc"],
+        allowedRoles: ["all", "hr"]
       },
       {
         id: "cyber_rhetoric",
@@ -468,11 +567,155 @@
         icon: "fa-solid fa-book-open-reader",
         color: "from-amber-500 to-orange-600",
         badge: "Publikasi Ilmiah",
-        tags: ["cyber", "rhetoric", "submission", "jurnal", "artikel", "paper", "penelitian"]
+        tags: ["cyber", "rhetoric", "submission", "jurnal", "artikel", "paper", "penelitian"],
+        allowedRoles: ["all"] // Sementara khusus Master
       }
     ];
 
-    // Local Storage Favorites Handling
+    // ==========================================
+    // ROLE / RBAC ENGINE
+    // ==========================================
+    let currentRole = "all";
+
+    function normalizeRoleKey(key) {
+      if (!key) return "all";
+      const clean = key.toLowerCase().trim();
+      // Dukung alias praktis untuk mempermudah link WhatsApp
+      if (clean === "warehouse" || clean === "warehouse_admin" || clean === "gudang") return "warehouse_admin";
+      if (clean === "workshop" || clean === "workshop_admin" || clean === "bengkel") return "workshop_admin";
+      if (clean === "hr" || clean === "hrd" || clean === "rekrutmen") return "hr";
+      if (clean === "master" || clean === "superadmin" || clean === "all") return "all";
+      return clean;
+    }
+
+    function initRole() {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const roleParam = urlParams.get("role");
+
+        if (roleParam) {
+          const normalized = normalizeRoleKey(roleParam);
+          if (ROLE_CONFIG[normalized]) {
+            currentRole = normalized;
+            localStorage.setItem("adpr_active_role", currentRole);
+          }
+        } else {
+          const savedRole = localStorage.getItem("adpr_active_role");
+          if (savedRole && ROLE_CONFIG[savedRole]) {
+            currentRole = savedRole;
+          } else {
+            currentRole = "all";
+          }
+        }
+      } catch (e) {
+        currentRole = "all";
+      }
+      applyRoleUI();
+    }
+
+    function setRoleFilter(roleKey) {
+      const normalized = normalizeRoleKey(roleKey);
+      currentRole = ROLE_CONFIG[normalized] ? normalized : "all";
+      
+      try {
+        localStorage.setItem("adpr_active_role", currentRole);
+      } catch (e) {}
+
+      // Update URL query string without reloading page (safely guarded against blob/sandbox iframes)
+      try {
+        if (!window.location.href.startsWith("blob:") && window.location.protocol.startsWith("http")) {
+          const newUrl = new URL(window.location.href);
+          if (currentRole === "all") {
+            newUrl.searchParams.delete("role");
+          } else {
+            newUrl.searchParams.set("role", currentRole);
+          }
+          window.history.replaceState({}, "", newUrl.toString());
+        }
+      } catch (err) {
+        console.warn("History state update bypassed in sandbox environment:", err);
+      }
+
+      applyRoleUI();
+      closeRoleModal();
+      renderFrequentSection();
+      renderSystems();
+      showToast(`Tampilan disesuaikan untuk: ${ROLE_CONFIG[currentRole].label}`, "fa-users-gear text-blue-500");
+    }
+
+    function applyRoleUI() {
+      const roleData = ROLE_CONFIG[currentRole] || ROLE_CONFIG.all;
+      const displayEl = document.getElementById("active-role-display");
+      const metricRoleEl = document.getElementById("metric-role");
+      const bannerEl = document.getElementById("role-notice-banner");
+      const bannerTitle = document.getElementById("role-banner-title");
+      const shareInput = document.getElementById("shareable-role-link");
+
+      if (displayEl) displayEl.textContent = roleData.label;
+      if (metricRoleEl) metricRoleEl.textContent = currentRole === "all" ? "MASTER" : roleData.label.toUpperCase();
+
+      if (currentRole !== "all") {
+        bannerEl.classList.remove("hidden");
+        bannerTitle.textContent = roleData.label;
+      } else {
+        bannerEl.classList.add("hidden");
+      }
+
+      if (shareInput) {
+        let baseOrigin = "https://adipranata-system.github.io/";
+        if (!window.location.href.startsWith("blob:") && window.location.protocol.startsWith("http") && !window.location.hostname.includes("usercontent.goog")) {
+          baseOrigin = window.location.origin + window.location.pathname;
+        }
+        shareInput.value = currentRole === "all" ? baseOrigin : `${baseOrigin}?role=${currentRole}`;
+      }
+    }
+
+    function openRoleModal() {
+      const container = document.getElementById("role-option-list");
+      container.innerHTML = Object.keys(ROLE_CONFIG).map(key => {
+        const r = ROLE_CONFIG[key];
+        const isSelected = key === currentRole;
+        return `
+          <button 
+            onclick="setRoleFilter('${key}')" 
+            class="w-full p-3 rounded-xl border text-left flex items-center justify-between transition-all ${
+              isSelected 
+                ? 'bg-blue-50 dark:bg-blue-500/10 border-blue-500/50 text-blue-600 dark:text-blue-400 font-bold' 
+                : 'bg-white dark:bg-slate-900/60 border-slate-200 dark:border-slate-700/70 text-slate-700 dark:text-slate-300 hover:border-blue-400 font-medium'
+            }"
+          >
+            <div class="flex items-center gap-3">
+              <div class="h-9 w-9 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center ${r.color}">
+                <i class="${r.icon}"></i>
+              </div>
+              <div>
+                <span class="text-xs sm:text-sm font-semibold">${r.label}</span>
+                <p class="text-[11px] text-slate-400 font-normal">${r.description || ''}</p>
+              </div>
+            </div>
+            ${isSelected ? '<i class="fa-solid fa-circle-check text-blue-500 text-sm"></i>' : ''}
+          </button>
+        `;
+      }).join("");
+
+      applyRoleUI();
+      document.getElementById("role-modal").classList.remove("hidden");
+    }
+
+    function closeRoleModal() {
+      document.getElementById("role-modal").classList.add("hidden");
+    }
+
+    function copyShareableRoleLink() {
+      const input = document.getElementById("shareable-role-link");
+      input.select();
+      document.execCommand("copy");
+      showToast("Link peran berhasil disalin! Siap dikirim ke tim.", "fa-circle-check text-emerald-500");
+    }
+
+    // ==========================================
+    // LOCAL STORAGE FAVORITES & USAGE STATS
+    // ==========================================
     let favorites = [];
     try {
       const stored = localStorage.getItem("adpr_fav_systems");
@@ -481,7 +724,6 @@
       favorites = [];
     }
 
-    // Local Storage Usage/Click Tracking for "Sering Digunakan"
     let clickStats = {};
     try {
       const storedStats = localStorage.getItem("adpr_click_stats");
@@ -490,16 +732,12 @@
       clickStats = {};
     }
 
-    // Helper: Detect if app is currently running in PWA Standalone Mode
     function isPwaMode() {
       return window.matchMedia('(display-mode: standalone)').matches || 
              window.navigator.standalone === true || 
              document.referrer.includes('android-app://');
     }
 
-    // Smart Launcher:
-    // If in PWA: navigate in the same window so Android/iOS Back gesture returns to Hub.
-    // If in normal browser: open in a new tab (_blank) for multitasking.
     function handleSystemLaunch(event, url, id) {
       registerSystemClick(id);
       if (isPwaMode()) {
@@ -508,13 +746,11 @@
       }
     }
 
-    // View Mode & Category State
     let viewMode = localStorage.getItem("adpr_view_mode") || "grid";
     let currentCategory = "all";
     let searchQuery = "";
     let activeModalSystemId = null;
 
-    // DOM Elements
     const gridEl = document.getElementById("systems-grid");
     const tableWrapEl = document.getElementById("systems-table-wrap");
     const tableBodyEl = document.getElementById("systems-table-body");
@@ -534,7 +770,7 @@
     const metaThemeColor = document.getElementById("meta-theme-color");
 
     // ==========================================
-    // 1. DARK / LIGHT MODE IMPLEMENTATION
+    // THEME HANDLING
     // ==========================================
     function initTheme() {
       const savedTheme = localStorage.getItem("adpr_theme");
@@ -569,7 +805,7 @@
     });
 
     // ==========================================
-    // 2. VIEW MODE TOGGLE (Grid vs Compact Table)
+    // VIEW MODE
     // ==========================================
     function setViewMode(mode) {
       viewMode = mode;
@@ -590,7 +826,7 @@
     }
 
     // ==========================================
-    // 3. SMART FREQUENT / RECENT SECTION
+    // FREQUENT SYSTEM TRACKING
     // ==========================================
     function registerSystemClick(id) {
       clickStats[id] = (clickStats[id] || 0) + 1;
@@ -608,14 +844,15 @@
     }
 
     function renderFrequentSection() {
-      // Find items that have at least 1 click
-      const keys = Object.keys(clickStats).filter(id => (clickStats[id] || 0) > 0);
+      const filteredByRole = SYSTEMS_DATA.filter(sys => currentRole === "all" || sys.allowedRoles.includes(currentRole));
+      const accessibleIds = filteredByRole.map(s => s.id);
+
+      const keys = Object.keys(clickStats).filter(id => (clickStats[id] || 0) > 0 && accessibleIds.includes(id));
       if (keys.length === 0) {
         frequentSectionEl.classList.add("hidden");
         return;
       }
 
-      // Sort descending by click count
       keys.sort((a, b) => clickStats[b] - clickStats[a]);
       const topItems = keys.slice(0, 3).map(id => SYSTEMS_DATA.find(s => s.id === id)).filter(Boolean);
 
@@ -659,7 +896,7 @@
     }
 
     // ==========================================
-    // 4. CLOCK & CALENDAR (Indonesian WIB)
+    // CLOCK & CALENDAR
     // ==========================================
     function updateClock() {
       const now = new Date();
@@ -685,7 +922,7 @@
     updateClock();
 
     // ==========================================
-    // 5. FAVORITES & UTILITIES
+    // FAVORITES & TOAST
     // ==========================================
     function toggleFavorite(id, event) {
       if (event) event.stopPropagation();
@@ -766,8 +1003,7 @@
       const copyBtn = document.getElementById("modal-copy-btn");
       copyBtn.onclick = () => copyUrl(item.url);
 
-      const modal = document.getElementById("info-modal");
-      modal.classList.remove("hidden");
+      document.getElementById("info-modal").classList.remove("hidden");
     }
 
     function closeModal() {
@@ -776,16 +1012,23 @@
     }
 
     // ==========================================
-    // 6. RENDER LOGIC (GRID & TABLE MODES)
+    // FILTER ENGINE (ROLE + CATEGORY + SEARCH)
     // ==========================================
     function getFilteredSystems() {
       return SYSTEMS_DATA.filter(sys => {
+        // 1. Role Filter
+        if (currentRole !== "all" && !sys.allowedRoles.includes(currentRole)) {
+          return false;
+        }
+
+        // 2. Category / Favorite Filter
         if (currentCategory === "favorite") {
           if (!favorites.includes(sys.id)) return false;
         } else if (currentCategory !== "all" && sys.category !== currentCategory) {
           return false;
         }
 
+        // 3. Text Query Filter
         if (searchQuery.trim() !== "") {
           const q = searchQuery.toLowerCase().trim();
           const matchTitle = sys.title.toLowerCase().includes(q);
@@ -800,6 +1043,10 @@
 
     function renderSystems() {
       const items = getFilteredSystems();
+      const accessibleRoleItems = SYSTEMS_DATA.filter(s => currentRole === "all" || s.allowedRoles.includes(currentRole));
+      
+      const metricEl = document.getElementById("metric-accessible");
+      if (metricEl) metricEl.textContent = accessibleRoleItems.length;
 
       if (items.length === 0) {
         gridEl.innerHTML = "";
@@ -811,13 +1058,11 @@
       emptyStateEl.classList.add("hidden");
 
       if (viewMode === "grid") {
-        // Render Card Grid View
         gridEl.innerHTML = items.map(sys => {
           const isFav = favorites.includes(sys.id);
           const clicks = clickStats[sys.id] || 0;
           return `
             <div class="glass-card rounded-2xl p-5 flex flex-col justify-between transition-all duration-300 relative group shadow-sm">
-              
               <div>
                 <div class="flex items-start justify-between gap-3 mb-4">
                   <div class="h-12 w-12 rounded-xl bg-gradient-to-tr ${sys.color} flex items-center justify-center text-white text-lg shadow-md shadow-slate-900/20 ring-1 ring-white/10 group-hover:scale-105 transition-transform duration-300">
@@ -892,7 +1137,6 @@
           `;
         }).join("");
       } else {
-        // Render Compact Table View
         tableBodyEl.innerHTML = items.map(sys => {
           const isFav = favorites.includes(sys.id);
           const clicks = clickStats[sys.id] || 0;
@@ -962,7 +1206,7 @@
     }
 
     // ==========================================
-    // 7. FILTER & SEARCH CONTROLS
+    // FILTER BUTTONS & CONTROLS
     // ==========================================
     const filterButtons = document.querySelectorAll(".cat-btn");
     filterButtons.forEach(btn => {
@@ -1000,17 +1244,9 @@
       searchQuery = "";
       clearSearchBtn.classList.add("hidden");
       currentCategory = "all";
-      filterButtons.forEach(b => {
-        if (b.getAttribute("data-cat") === "all") {
-          b.className = "cat-btn active-tab px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all bg-blue-600 text-white shadow-sm shadow-blue-500/30";
-        } else {
-          b.className = "cat-btn px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700/60";
-        }
-      });
-      renderSystems();
+      setRoleFilter("all");
     }
 
-    // Keyboard shortcut '/' to search
     window.addEventListener("keydown", (e) => {
       if (e.key === "/" && document.activeElement !== searchInput) {
         e.preventDefault();
@@ -1018,21 +1254,22 @@
       }
       if (e.key === "Escape") {
         closeModal();
+        closeRoleModal();
       }
     });
 
-    // Close modal on outside click
     document.getElementById("info-modal").addEventListener("click", (e) => {
-      if (e.target.id === "info-modal") {
-        closeModal();
-      }
+      if (e.target.id === "info-modal") closeModal();
+    });
+
+    document.getElementById("role-modal").addEventListener("click", (e) => {
+      if (e.target.id === "role-modal") closeRoleModal();
     });
 
     // ==========================================
-    // 8. PROGRESSIVE WEB APP (PWA) INITIALIZATION
+    // PWA REGISTRATION
     // ==========================================
     function setupPWA() {
-      // 1. Inject Dynamic Web Manifest with full origin scope ("/")
       const manifest = {
         name: "Adi Pranata Central Systems Hub",
         short_name: "Adi Systems",
@@ -1063,7 +1300,6 @@
       manifestLink.href = manifestUrl;
       document.head.appendChild(manifestLink);
 
-      // 2. Register Minimalist Offline Service Worker via Blob
       if ("serviceWorker" in navigator) {
         const swScript = `
           const CACHE_NAME = 'aps-cache-v2';
@@ -1080,7 +1316,6 @@
         navigator.serviceWorker.register(swUrl).catch(() => {});
       }
 
-      // 3. Handle 'beforeinstallprompt' for App Install Button
       let deferredPrompt = null;
       const installBtn = document.getElementById("pwa-install-btn");
       
@@ -1115,6 +1350,7 @@
     // ==========================================
     window.onload = function() {
       initTheme();
+      initRole();
       setViewMode(viewMode);
       renderFrequentSection();
       renderSystems();
