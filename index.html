@@ -427,7 +427,7 @@
         title: "Ujian Seleksi Admin",
         category: "hr",
         categoryLabel: "HR & Asesmen",
-        url: "https://adipranata-system.github.io/UjianAdm-KTC/",
+        url: "https://adipranata-system.github.io/Ujian-KTC/",
         description: "Portal asesmen online dan evaluasi kompetensi tertulis calon staf administrasi, pengarsipan, dan tata kelola kantor KTC.",
         icon: "fa-solid fa-file-signature",
         color: "from-emerald-500 to-green-600",
@@ -488,6 +488,24 @@
       clickStats = storedStats ? JSON.parse(storedStats) : {};
     } catch (e) {
       clickStats = {};
+    }
+
+    // Helper: Detect if app is currently running in PWA Standalone Mode
+    function isPwaMode() {
+      return window.matchMedia('(display-mode: standalone)').matches || 
+             window.navigator.standalone === true || 
+             document.referrer.includes('android-app://');
+    }
+
+    // Smart Launcher:
+    // If in PWA: navigate in the same window so Android/iOS Back gesture returns to Hub.
+    // If in normal browser: open in a new tab (_blank) for multitasking.
+    function handleSystemLaunch(event, url, id) {
+      registerSystemClick(id);
+      if (isPwaMode()) {
+        if (event) event.preventDefault();
+        window.location.href = url;
+      }
     }
 
     // View Mode & Category State
@@ -628,9 +646,8 @@
             </div>
             <a 
               href="${sys.url}" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              onclick="registerSystemClick('${sys.id}')"
+              ${isPwaMode() ? '' : 'target="_blank" rel="noopener noreferrer"'} 
+              onclick="handleSystemLaunch(event, '${sys.url}', '${sys.id}')"
               class="shrink-0 h-8 px-3 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow-sm transition-all"
             >
               <span>Buka</span>
@@ -737,18 +754,20 @@
 
       const launchBtn = document.getElementById("modal-launch-btn");
       launchBtn.href = item.url;
+      if (isPwaMode()) {
+        launchBtn.removeAttribute("target");
+        launchBtn.removeAttribute("rel");
+      } else {
+        launchBtn.setAttribute("target", "_blank");
+        launchBtn.setAttribute("rel", "noopener noreferrer");
+      }
+      launchBtn.onclick = (e) => handleSystemLaunch(e, item.url, item.id);
 
       const copyBtn = document.getElementById("modal-copy-btn");
       copyBtn.onclick = () => copyUrl(item.url);
 
       const modal = document.getElementById("info-modal");
       modal.classList.remove("hidden");
-    }
-
-    function trackLaunchFromModal() {
-      if (activeModalSystemId) {
-        registerSystemClick(activeModalSystemId);
-      }
     }
 
     function closeModal() {
@@ -844,9 +863,8 @@
               <div class="pt-4 border-t border-slate-100 dark:border-slate-700/50 flex items-center gap-2">
                 <a 
                   href="${sys.url}" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  onclick="registerSystemClick('${sys.id}')"
+                  ${isPwaMode() ? '' : 'target="_blank" rel="noopener noreferrer"'} 
+                  onclick="handleSystemLaunch(event, '${sys.url}', '${sys.id}')"
                   class="flex-1 inline-flex items-center justify-center gap-2 py-2 px-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-sm hover:shadow-blue-500/20 transition-all duration-200"
                 >
                   <span>Buka Sistem</span>
@@ -914,9 +932,8 @@
                 <div class="flex items-center justify-center gap-1.5">
                   <a 
                     href="${sys.url}" 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    onclick="registerSystemClick('${sys.id}')"
+                    ${isPwaMode() ? '' : 'target="_blank" rel="noopener noreferrer"'} 
+                    onclick="handleSystemLaunch(event, '${sys.url}', '${sys.id}')"
                     class="py-1.5 px-3 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold inline-flex items-center gap-1 shadow-sm transition-all"
                   >
                     <span>Buka</span>
@@ -1015,12 +1032,13 @@
     // 8. PROGRESSIVE WEB APP (PWA) INITIALIZATION
     // ==========================================
     function setupPWA() {
-      // 1. Inject Dynamic Web Manifest
+      // 1. Inject Dynamic Web Manifest with full origin scope ("/")
       const manifest = {
         name: "Adi Pranata Central Systems Hub",
         short_name: "Adi Systems",
         description: "Pusat Akses Sistem & Aplikasi Adi Pranata",
-        start_url: window.location.href,
+        start_url: window.location.origin + "/",
+        scope: "/",
         display: "standalone",
         background_color: "#030712",
         theme_color: "#2563eb",
@@ -1048,7 +1066,7 @@
       // 2. Register Minimalist Offline Service Worker via Blob
       if ("serviceWorker" in navigator) {
         const swScript = `
-          const CACHE_NAME = 'aps-cache-v1';
+          const CACHE_NAME = 'aps-cache-v2';
           self.addEventListener('install', (e) => self.skipWaiting());
           self.addEventListener('activate', (e) => self.clients.claim());
           self.addEventListener('fetch', (e) => {
