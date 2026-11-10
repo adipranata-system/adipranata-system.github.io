@@ -124,7 +124,7 @@
               <span class="truncate">Adi Pranata Systems</span>
               <i class="fa-brands fa-linkedin text-[#0a66c2] text-xs sm:text-sm group-hover:scale-110 transition-transform shrink-0"></i>
             </a>
-            <span class="hidden sm:inline-flex px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 shrink-0">v2.7</span>
+            <span class="hidden sm:inline-flex px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 shrink-0">v2.9</span>
           </div>
           <div class="flex items-center gap-1.5 mt-0.5">
             <p class="hidden sm:inline text-xs text-slate-500 dark:text-slate-400 shrink-0">Pusat Akses Sistem Kerja</p>
@@ -215,7 +215,7 @@
         <!-- Quick Summary Metrics -->
         <div class="flex items-center gap-3">
           <div class="px-4 py-3 rounded-xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700/70 text-center min-w-[90px] shadow-sm">
-            <span id="metric-accessible" class="text-xl font-bold text-blue-600 dark:text-blue-400">7</span>
+            <span id="metric-accessible" class="text-xl font-bold text-blue-600 dark:text-blue-400">9</span>
             <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Modul Aktif</p>
           </div>
           <div class="px-4 py-3 rounded-xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700/70 text-center min-w-[90px] shadow-sm">
@@ -311,7 +311,7 @@
           <i class="fa-solid fa-user-check mr-1.5 text-emerald-500"></i>HR & Rekrutmen
         </button>
         <button data-cat="academic" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700/60">
-          <i class="fa-solid fa-newspaper mr-1.5 text-amber-500"></i>Akademik & Publikasi
+          <i class="fa-solid fa-shapes mr-1.5 text-amber-500"></i>Media & Publikasi
         </button>
         <button data-cat="favorite" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700/60">
           <i class="fa-solid fa-star mr-1.5 text-yellow-400"></i>Favorit (<span id="fav-count">0</span>)
@@ -472,6 +472,12 @@
         color: "text-blue-500",
         description: "Monitoring dispensing oli & logistik gudang"
       },
+      storeman: { 
+        label: "Storeman", 
+        icon: "fa-solid fa-boxes-packing", 
+        color: "text-indigo-500",
+        description: "Kartu stok digital & mutasi keluar-masuk sparepart"
+      },
       workshop_admin: { 
         label: "Workshop Admin", 
         icon: "fa-solid fa-screwdriver-wrench", 
@@ -515,6 +521,19 @@
         allowedRoles: ["all", "warehouse_admin"]
       },
       {
+        id: "stock_card",
+        title: "Stock Card Digital System",
+        category: "ops",
+        categoryLabel: "Gudang & Inventaris",
+        url: "https://adipranata-system.github.io/StockCard/",
+        description: "Sistem kartu stok digital untuk monitoring mutasi keluar-masuk sparepart, tracking saldo fisik, dan kontrol inventaris gudang secara real-time.",
+        icon: "fa-solid fa-boxes-stacked",
+        color: "from-indigo-600 to-blue-700",
+        badge: "Warehouse",
+        tags: ["stock", "card", "kartu", "stok", "warehouse", "gudang", "sparepart", "inventaris"],
+        allowedRoles: ["all", "warehouse_admin", "storeman"]
+      },
+      {
         id: "recruitment_ktc",
         title: "Portal Rekrutmen KTC",
         category: "hr",
@@ -532,7 +551,7 @@
         title: "Ujian Seleksi Admin",
         category: "hr",
         categoryLabel: "HR & Asesmen",
-        url: "https://adipranata-system.github.io/UjianAdm-KTC/",
+        url: "https://adipranata-system.github.io/Ujian-KTC/",
         description: "Portal asesmen online dan evaluasi kompetensi tertulis calon staf administrasi, pengarsipan, dan tata kelola kantor KTC.",
         icon: "fa-solid fa-file-signature",
         color: "from-emerald-500 to-green-600",
@@ -578,6 +597,19 @@
         badge: "Publikasi Ilmiah",
         tags: ["cyber", "rhetoric", "submission", "jurnal", "artikel", "paper", "penelitian"],
         allowedRoles: ["all"] // Sementara khusus Master
+      },
+      {
+        id: "dokter_unit",
+        title: "Pembukuan Channel YouTube DokTer Unit",
+        category: "academic",
+        categoryLabel: "Keuangan & Media",
+        url: "https://adipranata-system.github.io/DokterUnit/",
+        description: "Sistem pencatatan cashflow operasional, rekap pendapatan AdSense/sponsor, serta pelaporan keuangan channel YouTube DokTer Unit.",
+        icon: "fa-solid fa-calculator",
+        color: "from-red-600 to-rose-700",
+        badge: "YouTube Media",
+        tags: ["pembukuan", "keuangan", "youtube", "dokter unit", "finance", "kas", "media"],
+        allowedRoles: ["all"] // Khusus Master
       }
     ];
 
@@ -591,6 +623,7 @@
       const clean = key.toLowerCase().trim();
       // Dukung alias praktis untuk mempermudah link WhatsApp
       if (clean === "warehouse" || clean === "warehouse_admin" || clean === "gudang") return "warehouse_admin";
+      if (clean === "storeman" || clean === "store" || clean === "stock") return "storeman";
       if (clean === "workshop" || clean === "workshop_admin" || clean === "bengkel") return "workshop_admin";
       if (clean === "hr" || clean === "hrd" || clean === "rekrutmen") return "hr";
       if (clean === "master" || clean === "superadmin" || clean === "all") return "all";
