@@ -277,9 +277,14 @@
         <div class="relative flex-1 max-w-md">
           <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
           <input 
-            type="text" 
+            type="search" 
             id="search-input" 
             placeholder="Cari modul... (Tekan '/' untuk fokus)" 
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"
+            name="system-search-field-query"
             class="w-full pl-10 pr-10 py-2.5 rounded-xl bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm"
           />
           <button 
@@ -1715,6 +1720,13 @@
     // INITIALIZATION
     // ==========================================
     window.onload = function() {
+      // Pastikan kolom pencarian selalu bersih dari cache/autofill browser
+      const sInput = document.getElementById("search-input");
+      if (sInput) {
+        sInput.value = "";
+      }
+      searchQuery = "";
+
       initTheme();
       initRole();
       setViewMode(viewMode);
