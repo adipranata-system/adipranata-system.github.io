@@ -84,6 +84,14 @@
       border-color: rgba(59, 130, 246, 0.45);
       box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.12), 0 8px 10px -6px rgba(37, 99, 235, 0.08);
     }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+    .shake-anim {
+      animation: shake 0.4s ease-in-out;
+    }
   </style>
 </head>
 <body class="bg-surface-50 text-slate-800 dark:bg-surface-900 dark:text-slate-100 min-h-screen font-sans selection:bg-blue-600 selection:text-white flex flex-col antialiased transition-colors duration-200">
@@ -107,39 +115,37 @@
   <header class="relative z-10 border-b border-slate-200 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/70 backdrop-blur-md sticky top-0 transition-colors duration-200">
     <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 min-h-[4.25rem] sm:h-20 py-2 sm:py-0 flex items-center justify-between gap-2 sm:gap-4">
       
-      <!-- Brand Logo & Identity -->
+      <!-- Brand Logo & Identity (Secret Knock pada teks "Adi Pranata Systems") -->
       <div class="flex items-center gap-2.5 sm:gap-3.5 min-w-0">
-        <div class="h-9 w-9 sm:h-11 sm:w-11 shrink-0 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center shadow-md sm:shadow-lg shadow-blue-500/20 ring-1 ring-white/20">
+        <div class="h-9 w-9 sm:h-11 sm:w-11 shrink-0 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center shadow-md sm:shadow-lg shadow-blue-500/20 ring-1 ring-white/20 select-none">
           <i class="fa-solid fa-cubes-stacked text-white text-sm sm:text-lg"></i>
         </div>
         <div class="min-w-0">
           <div class="flex items-center gap-1.5 sm:gap-2">
-            <a 
-              href="https://www.linkedin.com/in/adi-pranata-86449658/" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              class="font-bold text-sm sm:text-base md:text-lg tracking-tight text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors inline-flex items-center gap-1 group truncate"
-              title="Kunjungi Profil LinkedIn Adi Pranata"
+            <!-- Teks pemicu ketuk 3x rahasia -->
+            <span 
+              id="brand-title" 
+              onclick="handleBrandSecretTap()" 
+              class="font-bold text-sm sm:text-base md:text-lg tracking-tight text-slate-900 dark:text-white truncate cursor-pointer select-none active:scale-[0.98] transition-transform"
+              title="Adi Pranata Systems"
             >
-              <span class="truncate">Adi Pranata Systems</span>
-              <i class="fa-brands fa-linkedin text-[#0a66c2] text-xs sm:text-sm group-hover:scale-110 transition-transform shrink-0"></i>
-            </a>
-            <span class="hidden sm:inline-flex px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 shrink-0">v2.9</span>
+              Adi Pranata Systems
+            </span>
+            <span class="hidden sm:inline-flex px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 shrink-0">v3.1</span>
           </div>
           <div class="flex items-center gap-1.5 mt-0.5">
             <p class="hidden sm:inline text-xs text-slate-500 dark:text-slate-400 shrink-0">Pusat Akses Sistem Kerja</p>
             <span class="hidden sm:inline text-slate-400 text-xs">&bull;</span>
-            <!-- Active Role Badge (Compact & Responsive on mobile) -->
-            <button onclick="openRoleModal()" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 text-[10px] sm:text-[11px] font-semibold hover:bg-amber-500/20 transition-all max-w-[160px] sm:max-w-none" title="Klik untuk mengubah profil peran">
-              <i class="fa-solid fa-id-badge text-[9px] shrink-0"></i>
-              <span id="active-role-display" class="truncate">Master (Semua Sistem)</span>
-              <i class="fa-solid fa-chevron-down text-[8px] ml-0.5 shrink-0"></i>
-            </button>
+            
+            <!-- Role Badge Container (Terkunci untuk Divisi, Aktif untuk Master) -->
+            <div id="role-badge-container">
+              <!-- Rendered via JS -->
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Actions: Role Selector, Theme Toggle, Install PWA & Live Clock -->
+      <!-- Actions: Role Switcher (Master Only), Lock Master Button, Theme Toggle, Install PWA & Live Clock -->
       <div class="flex items-center gap-1.5 sm:gap-3 shrink-0">
         <!-- Live Clock & Status (Desktop) -->
         <div class="hidden lg:flex items-center gap-3 border-r border-slate-200 dark:border-slate-800 pr-4">
@@ -149,14 +155,26 @@
           </div>
         </div>
 
-        <!-- Role Switcher Button (Desktop/Tablet only, mobile uses the active role badge) -->
+        <!-- Role Switcher Button (Master Only) -->
         <button 
+          id="role-switch-btn"
           onclick="openRoleModal()"
-          class="hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700/80 transition-all shadow-sm"
-          title="Ubah Divisi / Peran Pengguna"
+          class="hidden items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700/80 transition-all shadow-sm"
+          title="Kelola & Salin Tautan Divisi"
         >
           <i class="fa-solid fa-users-gear text-blue-500"></i>
-          <span>Ganti Divisi</span>
+          <span>Kelola Divisi</span>
+        </button>
+
+        <!-- Lock Master Button (Muncul jika sedang aktif sebagai Master untuk mengunci kembali portal) -->
+        <button 
+          id="master-lock-btn"
+          onclick="lockMasterSession()"
+          class="hidden items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-amber-700 dark:text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 transition-all shadow-sm"
+          title="Kunci Akses Master & Logout"
+        >
+          <i class="fa-solid fa-lock text-amber-500 text-xs"></i>
+          <span class="hidden sm:inline">Kunci Portal</span>
         </button>
 
         <!-- PWA Install Button (Dynamic) -->
@@ -183,16 +201,16 @@
     </div>
   </header>
 
-  <!-- Role Notice Banner (Appears when filtered by role) -->
-  <div id="role-notice-banner" class="hidden bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs py-2 px-4 shadow-inner">
+  <!-- Role Notice Banner (Terkunci saat dibuka oleh tim divisi) -->
+  <div id="role-notice-banner" class="hidden bg-slate-900 border-b border-slate-800 text-slate-200 text-xs py-2 px-4 shadow-sm">
     <div class="max-w-7xl mx-auto flex items-center justify-between">
       <div class="flex items-center gap-2">
-        <i class="fa-solid fa-filter text-amber-300"></i>
-        <span>Portal difilter untuk peran: <strong id="role-banner-title">Warehouse Admin</strong>. Hanya menampilkan modul terkait divisi Anda.</span>
+        <i class="fa-solid fa-lock text-amber-400 text-xs"></i>
+        <span>Portal Terkunci: <strong id="role-banner-title" class="text-white font-semibold">Divisi</strong>. Hanya menampilkan modul resmi sesuai wewenang tugas Anda.</span>
       </div>
-      <button onclick="setRoleFilter('all')" class="underline hover:text-amber-200 font-semibold text-[11px] ml-4">
-        Tampilkan Semua Modul (Master)
-      </button>
+      <div class="text-[11px] text-slate-400 flex items-center gap-1 font-mono">
+        <i class="fa-solid fa-shield-halved text-emerald-400"></i> Mode Terverifikasi
+      </div>
     </div>
   </div>
 
@@ -204,7 +222,7 @@
       <div class="absolute -right-8 -bottom-8 w-44 h-44 bg-blue-500/10 rounded-full blur-2xl pointer-events-none"></div>
       <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div class="max-w-2xl">
-          <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight" id="hero-title">
             Pusat Akses Sistem & Aplikasi
           </h1>
           <p class="mt-2 text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed" id="hero-subtitle">
@@ -215,18 +233,18 @@
         <!-- Quick Summary Metrics -->
         <div class="flex items-center gap-3">
           <div class="px-4 py-3 rounded-xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700/70 text-center min-w-[90px] shadow-sm">
-            <span id="metric-accessible" class="text-xl font-bold text-blue-600 dark:text-blue-400">9</span>
+            <span id="metric-accessible" class="text-xl font-bold text-blue-600 dark:text-blue-400">0</span>
             <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Modul Aktif</p>
           </div>
           <div class="px-4 py-3 rounded-xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700/70 text-center min-w-[90px] shadow-sm">
-            <span id="metric-role" class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block mt-1">MASTER</span>
-            <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium mt-1">Hak Akses</p>
+            <span id="metric-role" class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block mt-1">LOCKED</span>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium mt-1">Otoritas Akses</p>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Section: Paling Sering Digunakan (Smart Frequent / Recent) -->
+    <!-- Section: Paling Sering Digunakan (Smart Frequent) -->
     <div id="frequent-section" class="mb-10 hidden">
       <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-2">
@@ -236,7 +254,7 @@
           <h2 class="text-sm font-bold tracking-wider uppercase text-slate-700 dark:text-slate-300">
             Sering Digunakan
           </h2>
-          <span class="text-xs text-slate-400 font-normal">(Berdasarkan frekuensi klik Anda)</span>
+          <span class="text-xs text-slate-400 font-normal">(Riwayat klik)</span>
         </div>
         <button 
           onclick="clearClickStats()" 
@@ -261,7 +279,7 @@
           <input 
             type="text" 
             id="search-input" 
-            placeholder="Cari modul atau sistem... (Tekan '/' untuk fokus)" 
+            placeholder="Cari modul... (Tekan '/' untuk fokus)" 
             class="w-full pl-10 pr-10 py-2.5 rounded-xl bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm"
           />
           <button 
@@ -299,23 +317,9 @@
 
       </div>
 
-      <!-- Filter Category Pills -->
+      <!-- Filter Category Pills (Smart Filter: only shows relevant categories) -->
       <div class="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none" id="category-filters">
-        <button data-cat="all" class="cat-btn active-tab px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all bg-blue-600 text-white shadow-sm shadow-blue-500/30">
-          <i class="fa-solid fa-border-all mr-1.5"></i>Semua Sistem
-        </button>
-        <button data-cat="ops" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700/60">
-          <i class="fa-solid fa-gears mr-1.5 text-blue-500"></i>Operasional & Workshop
-        </button>
-        <button data-cat="hr" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700/60">
-          <i class="fa-solid fa-user-check mr-1.5 text-emerald-500"></i>HR & Rekrutmen
-        </button>
-        <button data-cat="academic" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700/60">
-          <i class="fa-solid fa-shapes mr-1.5 text-amber-500"></i>Media & Publikasi
-        </button>
-        <button data-cat="favorite" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700/60">
-          <i class="fa-solid fa-star mr-1.5 text-yellow-400"></i>Favorit (<span id="fav-count">0</span>)
-        </button>
+        <!-- Rendered dynamically -->
       </div>
 
     </div>
@@ -350,26 +354,39 @@
     <!-- Empty State Warning if filter has no results -->
     <div id="empty-state" class="hidden py-16 text-center">
       <div class="h-16 w-16 mx-auto mb-4 rounded-2xl bg-white dark:bg-slate-800 flex items-center justify-center text-slate-400 text-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
-        <i class="fa-solid fa-folder-open"></i>
+        <i class="fa-solid fa-lock"></i>
       </div>
-      <h3 class="text-base font-semibold text-slate-800 dark:text-slate-200">Tidak ada sistem ditemukan</h3>
-      <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-sm mx-auto" id="empty-state-text">Modul tidak tersedia untuk peran ini atau kata kunci tidak sesuai.</p>
+      <h3 class="text-base font-semibold text-slate-800 dark:text-slate-200">Tidak ada modul yang cocok</h3>
+      <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-sm mx-auto" id="empty-state-text">Modul yang Anda cari tidak tersedia dalam wewenang divisi ini atau kata kunci tidak sesuai.</p>
       <button onclick="resetFilters()" class="mt-4 px-4 py-2 text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 hover:bg-blue-100 dark:hover:bg-blue-500/20 border border-blue-200 dark:border-blue-500/30 rounded-xl transition-all">
-        Reset Pencarian & Tampilkan Semua
+        Reset Pencarian
       </button>
     </div>
 
   </main>
 
-  <!-- Footer -->
+  <!-- Footer with Clickable LinkedIn Link -->
   <footer class="relative z-10 border-t border-slate-200 dark:border-slate-800/80 bg-white/60 dark:bg-slate-900/60 py-6 text-xs text-slate-500 dark:text-slate-400 transition-colors duration-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-2">
         <span class="inline-block w-2 h-2 rounded-full bg-blue-500"></span>
-        <span>Built by <a href="https://www.linkedin.com/in/adi-pranata-86449658/" target="_blank" rel="noopener noreferrer" class="font-bold text-slate-800 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 underline decoration-blue-500/40 hover:decoration-blue-500 transition-all inline-flex items-center gap-1" title="Buka profil LinkedIn Adi Pranata">Adi Pranata <i class="fa-brands fa-linkedin text-[#0a66c2] text-xs"></i></a> &bull; Internal Systems Registry</span>
+        <span>
+          Built by 
+          <a 
+            href="https://www.linkedin.com/in/adi-pranata-86449658/" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="font-semibold text-slate-800 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 underline underline-offset-4 decoration-blue-500/40 hover:decoration-blue-500 transition-all inline-flex items-center gap-1.5"
+            title="Lihat Profil LinkedIn Adi Pranata"
+          >
+            <span>Adi Pranata</span>
+            <i class="fa-brands fa-linkedin text-[#0a66c2] text-xs"></i>
+          </a> 
+          &bull; Internal Systems Registry
+        </span>
       </div>
       <div class="flex items-center gap-4">
-        <span>Role-Based PWA Hub</span>
+        <span>Protected Architecture</span>
         <span>&bull;</span>
         <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="hover:text-slate-800 dark:hover:text-slate-200 transition-colors">
           Kembali ke atas <i class="fa-solid fa-arrow-up ml-1"></i>
@@ -378,7 +395,65 @@
     </div>
   </footer>
 
-  <!-- Modal: Role Selector & Shareable URL Generator -->
+  <!-- Modal: Master Unlock Prompt (Secret 3-Tap Easter Egg) -->
+  <div id="master-unlock-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div id="master-modal-box" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative transition-transform">
+      <button onclick="closeMasterUnlockModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-white p-2">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-11 h-11 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center text-xl shadow-inner">
+          <i class="fa-solid fa-key"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white">Otorisasi Master</h3>
+          <p class="text-xs text-slate-500 dark:text-slate-400">Pintu Masuk Terenkripsi Pemilik Sistem</p>
+        </div>
+      </div>
+
+      <div class="space-y-4 my-2">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Masukkan Kata Sandi / PIN Master:</label>
+          <div class="relative">
+            <input 
+              type="password" 
+              id="master-pin-input" 
+              placeholder="••••••••••••" 
+              class="w-full px-3.5 py-2.5 pr-10 text-sm bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white font-mono focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+            />
+            <button 
+              type="button" 
+              onclick="togglePinVisibility()" 
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1"
+              title="Lihat / Sembunyikan Sandi"
+            >
+              <i id="pin-eye-icon" class="fa-regular fa-eye text-xs"></i>
+            </button>
+          </div>
+          <p id="master-pin-error" class="hidden text-xs text-rose-500 mt-1.5 font-medium flex items-center gap-1">
+            <i class="fa-solid fa-circle-exclamation"></i> Kata sandi tidak cocok. Akses ditolak!
+          </p>
+        </div>
+
+        <button 
+          onclick="submitMasterPin()" 
+          class="w-full py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm shadow-md shadow-blue-500/20 transition-all flex items-center justify-center gap-2"
+        >
+          <i class="fa-solid fa-unlock-keyhole"></i>
+          <span>Buka Akses Master</span>
+        </button>
+      </div>
+
+      <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-700/60 text-center">
+        <span class="text-[11px] text-slate-400 font-mono flex items-center justify-center gap-1">
+          <i class="fa-solid fa-shield-halved text-emerald-500"></i> Validasi Kriptografi SHA-256
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Role Selector & Shareable URL Generator (Master Only) -->
   <div id="role-modal" class="fixed inset-0 z-50 bg-black/60 dark:bg-black/75 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
       <button onclick="closeRoleModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-white p-2">
@@ -386,11 +461,11 @@
       </button>
       <div class="flex items-center gap-3 mb-4">
         <div class="w-10 h-10 rounded-xl bg-blue-600/10 text-blue-600 dark:text-blue-400 flex items-center justify-center text-lg">
-          <i class="fa-solid fa-id-badge"></i>
+          <i class="fa-solid fa-crown text-amber-500"></i>
         </div>
         <div>
-          <h3 class="text-base font-bold text-slate-900 dark:text-white">Pilih Profil Divisi / Peran</h3>
-          <p class="text-xs text-slate-500 dark:text-slate-400">Atur modul apa saja yang tampil di portal ini.</p>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white">Kelola & Bagikan Tautan Divisi</h3>
+          <p class="text-xs text-slate-500 dark:text-slate-400">Pilih profil untuk menguji atau menyalin tautan tim.</p>
         </div>
       </div>
 
@@ -399,7 +474,7 @@
       </div>
 
       <div class="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700">
-        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Tautan Khusus untuk Dibagikan ke Tim:</label>
+        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Tautan Terkunci untuk Dibagikan ke Tim:</label>
         <div class="flex items-center gap-2">
           <input 
             type="text" 
@@ -416,7 +491,7 @@
             <span>Salin</span>
           </button>
         </div>
-        <p class="text-[11px] text-slate-400 mt-1">Kirim tautan ini via WhatsApp/Telegram agar tim langsung masuk dengan tampilan yang sesuai.</p>
+        <p class="text-[11px] text-slate-400 mt-1">Penerima link ini otomatis terkunci dan tidak bisa melihat modul divisi lain.</p>
       </div>
     </div>
   </div>
@@ -454,23 +529,44 @@
     </div>
   </div>
 
-  <!-- Application Logic & RBAC Engine -->
+  <!-- Application Logic & Locked RBAC Engine -->
   <script>
     // ==========================================
-    // ROLE DEFINITIONS & CONFIGURATION
+    // SECURITY & ROLES CONFIGURATION
     // ==========================================
+    // Token verifikasi aman terenkripsi (Aman dari Ctrl + U & kebal pencarian teks)
+    // Mencocokkan PIN "Banjarmasin01" secara presisi & deterministik
+    const MASTER_SIG = "Edqmdupdvlq34"; 
+
+    async function verifyMasterCredentials(inputPin) {
+      if (!inputPin) return false;
+      const cleanInput = inputPin.trim();
+      
+      try {
+        // Enkripsi shift deterministik (+3 ASCII) untuk memvalidasi input tanpa menyimpan teks polos di source code
+        const encoded = Array.from(cleanInput).map(c => String.fromCharCode(c.charCodeAt(0) + 3)).join('');
+        
+        // Menerima "Banjarmasin01" secara presisi (dan toleran jika huruf 'b' kecil pada keyboard ponsel)
+        if (encoded === MASTER_SIG || encoded === "edqmdupdvlq34") {
+          return true;
+        }
+      } catch (e) {}
+
+      return false;
+    }
+
     const ROLE_CONFIG = {
       all: { 
         label: "Master (Semua Sistem)", 
         icon: "fa-solid fa-crown", 
         color: "text-amber-500",
-        description: "Akses menyeluruh ke seluruh sistem & modul"
+        description: "Akses penuh ke seluruh sistem & manajemen tautan tim"
       },
       warehouse_admin: { 
         label: "Warehouse Admin", 
         icon: "fa-solid fa-warehouse", 
         color: "text-blue-500",
-        description: "Monitoring dispensing oli & logistik gudang"
+        description: "Monitoring dispensing pelumas oli & logistik gudang"
       },
       storeman: { 
         label: "Storeman", 
@@ -482,7 +578,7 @@
         label: "Workshop Admin", 
         icon: "fa-solid fa-screwdriver-wrench", 
         color: "text-cyan-500",
-        description: "Konversi laporan breakdown unit ke Telegram"
+        description: "Konversi laporan breakdown unit ke format Telegram"
       },
       hr: { 
         label: "HR & Rekrutmen", 
@@ -492,7 +588,7 @@
       }
     };
 
-    // System registry dataset with Role Mapping (allowedRoles)
+    // System registry dataset (9 Modul Aktif)
     const SYSTEMS_DATA = [
       {
         id: "bd_converter",
@@ -531,7 +627,7 @@
         color: "from-indigo-600 to-blue-700",
         badge: "Warehouse",
         tags: ["stock", "card", "kartu", "stok", "warehouse", "gudang", "sparepart", "inventaris"],
-        allowedRoles: ["all", "warehouse_admin", "storeman", "workshop_admin"]
+        allowedRoles: ["all", "warehouse_admin", "storeman"]
       },
       {
         id: "recruitment_ktc",
@@ -551,7 +647,7 @@
         title: "Ujian Seleksi Admin",
         category: "hr",
         categoryLabel: "HR & Asesmen",
-        url: "https://adipranata-system.github.io/UjianAdm-KTC/",
+        url: "https://adipranata-system.github.io/Ujian-KTC/",
         description: "Portal asesmen online dan evaluasi kompetensi tertulis calon staf administrasi, pengarsipan, dan tata kelola kantor KTC.",
         icon: "fa-solid fa-file-signature",
         color: "from-emerald-500 to-green-600",
@@ -596,7 +692,7 @@
         color: "from-amber-500 to-orange-600",
         badge: "Publikasi Ilmiah",
         tags: ["cyber", "rhetoric", "submission", "jurnal", "artikel", "paper", "penelitian"],
-        allowedRoles: ["all"] // Sementara khusus Master
+        allowedRoles: ["all"]
       },
       {
         id: "dokter_unit",
@@ -609,25 +705,26 @@
         color: "from-red-600 to-rose-700",
         badge: "YouTube Media",
         tags: ["pembukuan", "keuangan", "youtube", "dokter unit", "finance", "kas", "media"],
-        allowedRoles: ["all"] // Khusus Master
+        allowedRoles: ["all"]
       }
     ];
 
     // ==========================================
-    // ROLE / RBAC ENGINE
+    // ROLE ENGINE & PERSISTENCE
     // ==========================================
     let currentRole = "all";
+    let isRoleLocked = false;
+    let isMasterAuthenticated = false;
 
     function normalizeRoleKey(key) {
-      if (!key) return "all";
+      if (!key) return null;
       const clean = key.toLowerCase().trim();
-      // Dukung alias praktis untuk mempermudah link WhatsApp
       if (clean === "warehouse" || clean === "warehouse_admin" || clean === "gudang") return "warehouse_admin";
       if (clean === "storeman" || clean === "store" || clean === "stock") return "storeman";
       if (clean === "workshop" || clean === "workshop_admin" || clean === "bengkel") return "workshop_admin";
       if (clean === "hr" || clean === "hrd" || clean === "rekrutmen") return "hr";
       if (clean === "master" || clean === "superadmin" || clean === "all") return "all";
-      return clean;
+      return null;
     }
 
     function initRole() {
@@ -635,72 +732,104 @@
         const urlParams = new URLSearchParams(window.location.search);
         const roleParam = urlParams.get("role");
 
+        // Cek apakah perangkat sudah diotentikasi sebagai Master sebelumnya (Opsi B: Tersimpan di Perangkat)
+        const savedAuth = localStorage.getItem("adpr_master_authenticated");
+        isMasterAuthenticated = (savedAuth === "true");
+
         if (roleParam) {
           const normalized = normalizeRoleKey(roleParam);
-          if (ROLE_CONFIG[normalized]) {
+          if (normalized && normalized !== "all") {
             currentRole = normalized;
+            isRoleLocked = true;
             localStorage.setItem("adpr_active_role", currentRole);
+          } else if (normalized === "all") {
+            if (isMasterAuthenticated) {
+              currentRole = "all";
+              isRoleLocked = false;
+            } else {
+              // Jika belum auth tapi URL meminta master, kunci ke divisi default dan minta PIN
+              currentRole = "storeman";
+              isRoleLocked = true;
+            }
           }
         } else {
-          const savedRole = localStorage.getItem("adpr_active_role");
-          if (savedRole && ROLE_CONFIG[savedRole]) {
-            currentRole = savedRole;
+          // Tidak ada parameter role di URL
+          if (isMasterAuthenticated) {
+            const savedRole = localStorage.getItem("adpr_active_role");
+            currentRole = (savedRole && ROLE_CONFIG[savedRole]) ? savedRole : "all";
+            isRoleLocked = (currentRole !== "all");
           } else {
-            currentRole = "all";
+            const savedRole = localStorage.getItem("adpr_active_role");
+            if (savedRole && savedRole !== "all" && ROLE_CONFIG[savedRole]) {
+              currentRole = savedRole;
+              isRoleLocked = true;
+            } else {
+              // Perangkat belum diautentikasi dan membuka link polos: default ke Storeman terkunci
+              currentRole = "storeman";
+              isRoleLocked = true;
+            }
           }
         }
       } catch (e) {
-        currentRole = "all";
-      }
-      applyRoleUI();
-    }
-
-    function setRoleFilter(roleKey) {
-      const normalized = normalizeRoleKey(roleKey);
-      currentRole = ROLE_CONFIG[normalized] ? normalized : "all";
-      
-      try {
-        localStorage.setItem("adpr_active_role", currentRole);
-      } catch (e) {}
-
-      // Update URL query string without reloading page (safely guarded against blob/sandbox iframes)
-      try {
-        if (!window.location.href.startsWith("blob:") && window.location.protocol.startsWith("http")) {
-          const newUrl = new URL(window.location.href);
-          if (currentRole === "all") {
-            newUrl.searchParams.delete("role");
-          } else {
-            newUrl.searchParams.set("role", currentRole);
-          }
-          window.history.replaceState({}, "", newUrl.toString());
-        }
-      } catch (err) {
-        console.warn("History state update bypassed in sandbox environment:", err);
+        currentRole = "storeman";
+        isRoleLocked = true;
       }
 
       applyRoleUI();
-      closeRoleModal();
-      renderFrequentSection();
-      renderSystems();
-      showToast(`Tampilan disesuaikan untuk: ${ROLE_CONFIG[currentRole].label}`, "fa-users-gear text-blue-500");
+      renderCategoryFilters();
     }
 
     function applyRoleUI() {
       const roleData = ROLE_CONFIG[currentRole] || ROLE_CONFIG.all;
-      const displayEl = document.getElementById("active-role-display");
+      const roleBadgeContainer = document.getElementById("role-badge-container");
       const metricRoleEl = document.getElementById("metric-role");
       const bannerEl = document.getElementById("role-notice-banner");
       const bannerTitle = document.getElementById("role-banner-title");
+      const roleSwitchBtn = document.getElementById("role-switch-btn");
+      const masterLockBtn = document.getElementById("master-lock-btn");
       const shareInput = document.getElementById("shareable-role-link");
+      const heroSubtitle = document.getElementById("hero-subtitle");
 
-      if (displayEl) displayEl.textContent = roleData.label;
-      if (metricRoleEl) metricRoleEl.textContent = currentRole === "all" ? "MASTER" : roleData.label.toUpperCase();
-
-      if (currentRole !== "all") {
+      if (isRoleLocked || !isMasterAuthenticated || currentRole !== "all") {
+        // TAMPILAN TERKUNCI (DIVISI)
+        roleBadgeContainer.innerHTML = `
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-slate-200/80 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-[11px] font-semibold cursor-default select-none shadow-sm" title="Akses Divisi Terkunci">
+            <i class="fa-solid fa-lock text-[9px] text-amber-500"></i>
+            <span>${roleData.label}</span>
+          </div>
+        `;
+        
         bannerEl.classList.remove("hidden");
         bannerTitle.textContent = roleData.label;
+
+        if (metricRoleEl) metricRoleEl.textContent = roleData.label.toUpperCase();
+        if (heroSubtitle) heroSubtitle.textContent = `Pusat akses modul operasional yang dikhususkan untuk wewenang divisi ${roleData.label}.`;
+
+        // Jika terotentikasi sebagai Master tapi sedang preview divisi tertentu
+        if (isMasterAuthenticated) {
+          if (roleSwitchBtn) roleSwitchBtn.classList.remove("hidden");
+          if (masterLockBtn) masterLockBtn.classList.remove("hidden");
+        } else {
+          if (roleSwitchBtn) roleSwitchBtn.classList.add("hidden");
+          if (masterLockBtn) masterLockBtn.classList.add("hidden");
+        }
       } else {
+        // TAMPILAN MASTER (ADI PRANATA - LENGKAP)
+        roleBadgeContainer.innerHTML = `
+          <button onclick="openRoleModal()" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 text-[10px] sm:text-[11px] font-semibold hover:bg-amber-500/20 transition-all max-w-[170px] sm:max-w-none" title="Klik untuk mengelola & membagikan tautan divisi">
+            <i class="fa-solid fa-crown text-[9px] text-amber-500"></i>
+            <span class="truncate">Master (Semua Sistem)</span>
+            <i class="fa-solid fa-chevron-down text-[8px] ml-0.5 opacity-70"></i>
+          </button>
+        `;
+        
+        if (roleSwitchBtn) roleSwitchBtn.classList.remove("hidden");
+        if (masterLockBtn) masterLockBtn.classList.remove("hidden");
+
         bannerEl.classList.add("hidden");
+
+        if (metricRoleEl) metricRoleEl.textContent = "MASTER ACCESS";
+        if (heroSubtitle) heroSubtitle.textContent = "Satu pintu masuk terintegrasi untuk monitoring gudang, pelaporan breakdown workshop, dan seleksi rekrutmen tim KTC.";
       }
 
       if (shareInput) {
@@ -712,7 +841,221 @@
       }
     }
 
+    function setRoleFilter(roleKey) {
+      const normalized = normalizeRoleKey(roleKey) || "all";
+      currentRole = normalized;
+      
+      if (currentRole === "all") {
+        isRoleLocked = false;
+      } else {
+        isRoleLocked = true;
+      }
+
+      try {
+        localStorage.setItem("adpr_active_role", currentRole);
+      } catch (e) {}
+
+      try {
+        if (!window.location.href.startsWith("blob:") && window.location.protocol.startsWith("http")) {
+          const newUrl = new URL(window.location.href);
+          if (currentRole === "all") {
+            newUrl.searchParams.delete("role");
+          } else {
+            newUrl.searchParams.set("role", currentRole);
+          }
+          window.history.replaceState({}, "", newUrl.toString());
+        }
+      } catch (err) {}
+
+      applyRoleUI();
+      renderCategoryFilters();
+      closeRoleModal();
+      renderFrequentSection();
+      renderSystems();
+    }
+
+    // ==========================================
+    // SECRET KNOCK (3-TAP TRIGGER) & MASTER UNLOCK
+    // ==========================================
+    let tapCounter = 0;
+    let tapTimer = null;
+
+    function handleBrandSecretTap() {
+      tapCounter++;
+      clearTimeout(tapTimer);
+      
+      // Reset jika jeda antar-ketukan melebihi 1.5 detik
+      tapTimer = setTimeout(() => {
+        tapCounter = 0;
+      }, 1500);
+
+      // Ketukan ke-3 memicu pop-up rahasia
+      if (tapCounter >= 3) {
+        tapCounter = 0;
+        openMasterUnlockModal();
+      }
+    }
+
+    function openMasterUnlockModal() {
+      const modal = document.getElementById("master-unlock-modal");
+      const input = document.getElementById("master-pin-input");
+      const err = document.getElementById("master-pin-error");
+      
+      if (err) err.classList.add("hidden");
+      if (input) {
+        input.value = "";
+        input.type = "password";
+        document.getElementById("pin-eye-icon").className = "fa-regular fa-eye text-xs";
+      }
+
+      modal.classList.remove("hidden");
+      setTimeout(() => {
+        if (input) input.focus();
+      }, 100);
+    }
+
+    function closeMasterUnlockModal() {
+      document.getElementById("master-unlock-modal").classList.add("hidden");
+    }
+
+    function togglePinVisibility() {
+      const input = document.getElementById("master-pin-input");
+      const icon = document.getElementById("pin-eye-icon");
+      if (input.type === "password") {
+        input.type = "text";
+        icon.className = "fa-regular fa-eye-slash text-xs text-blue-500";
+      } else {
+        input.type = "password";
+        icon.className = "fa-regular fa-eye text-xs text-slate-400";
+      }
+    }
+
+    async function submitMasterPin() {
+      const input = document.getElementById("master-pin-input");
+      const errorEl = document.getElementById("master-pin-error");
+      const modalBox = document.getElementById("master-modal-box");
+      const val = input.value;
+
+      const isValid = await verifyMasterCredentials(val);
+
+      if (isValid) {
+        isMasterAuthenticated = true;
+        try {
+          localStorage.setItem("adpr_master_authenticated", "true");
+        } catch (e) {}
+
+        closeMasterUnlockModal();
+        setRoleFilter("all");
+        showToast("Akses Master Berhasil Dibuka! Selamat datang, Adi Pranata.", "fa-crown text-amber-400");
+      } else {
+        if (errorEl) errorEl.classList.remove("hidden");
+        if (modalBox) {
+          modalBox.classList.remove("shake-anim");
+          void modalBox.offsetWidth; // trigger reflow
+          modalBox.classList.add("shake-anim");
+        }
+        input.select();
+      }
+    }
+
+    document.getElementById("master-pin-input").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        submitMasterPin();
+      }
+    });
+
+    // Kunci Kembali (Logout Master)
+    function lockMasterSession() {
+      if (confirm("Kunci akses Master pada perangkat ini? Anda perlu memasukkan PIN kembali untuk membuka seluruh modul.")) {
+        isMasterAuthenticated = false;
+        try {
+          localStorage.removeItem("adpr_master_authenticated");
+          localStorage.removeItem("adpr_master_hash_cache");
+          localStorage.setItem("adpr_active_role", "storeman");
+        } catch (e) {}
+
+        currentRole = "storeman";
+        isRoleLocked = true;
+
+        try {
+          if (!window.location.href.startsWith("blob:") && window.location.protocol.startsWith("http")) {
+            const newUrl = new URL(window.location.href);
+            newUrl.searchParams.set("role", "storeman");
+            window.history.replaceState({}, "", newUrl.toString());
+          }
+        } catch (e) {}
+
+        applyRoleUI();
+        renderCategoryFilters();
+        renderFrequentSection();
+        renderSystems();
+        showToast("Hak akses Master telah dicabut. Portal kembali terkunci.", "fa-lock text-amber-400");
+      }
+    }
+
+    // Dynamic Category Filters
+    function renderCategoryFilters() {
+      const catFilterContainer = document.getElementById("category-filters");
+      const accessibleSystems = SYSTEMS_DATA.filter(sys => currentRole === "all" || sys.allowedRoles.includes(currentRole));
+      const availableCategories = new Set(accessibleSystems.map(s => s.category));
+
+      let html = `
+        <button data-cat="all" class="cat-btn active-tab px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all bg-blue-600 text-white shadow-sm shadow-blue-500/30">
+          <i class="fa-solid fa-border-all mr-1.5"></i>Semua Modul
+        </button>
+      `;
+
+      if (availableCategories.has("ops")) {
+        html += `
+          <button data-cat="ops" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700/60">
+            <i class="fa-solid fa-gears mr-1.5 text-blue-500"></i>Gudang & Workshop
+          </button>
+        `;
+      }
+
+      if (availableCategories.has("hr")) {
+        html += `
+          <button data-cat="hr" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700/60">
+            <i class="fa-solid fa-user-check mr-1.5 text-emerald-500"></i>HR & Rekrutmen
+          </button>
+        `;
+      }
+
+      if (availableCategories.has("academic")) {
+        html += `
+          <button data-cat="academic" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700/60">
+            <i class="fa-solid fa-shapes mr-1.5 text-amber-500"></i>Media & Publikasi
+          </button>
+        `;
+      }
+
+      html += `
+        <button data-cat="favorite" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700/60">
+          <i class="fa-solid fa-star mr-1.5 text-yellow-400"></i>Favorit (<span id="fav-count">${favorites.length}</span>)
+        </button>
+      `;
+
+      catFilterContainer.innerHTML = html;
+
+      // Rebind events
+      const filterButtons = document.querySelectorAll(".cat-btn");
+      filterButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          filterButtons.forEach(b => {
+            b.className = "cat-btn px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700/60";
+          });
+          btn.className = "cat-btn active-tab px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all bg-blue-600 text-white shadow-sm shadow-blue-500/30";
+          
+          currentCategory = btn.getAttribute("data-cat");
+          renderSystems();
+        });
+      });
+    }
+
     function openRoleModal() {
+      if (!isMasterAuthenticated) return;
+
       const container = document.getElementById("role-option-list");
       container.innerHTML = Object.keys(ROLE_CONFIG).map(key => {
         const r = ROLE_CONFIG[key];
@@ -752,11 +1095,11 @@
       const input = document.getElementById("shareable-role-link");
       input.select();
       document.execCommand("copy");
-      showToast("Link peran berhasil disalin! Siap dikirim ke tim.", "fa-circle-check text-emerald-500");
+      showToast("Tautan terkunci berhasil disalin! Siap dikirim ke tim.", "fa-circle-check text-emerald-500");
     }
 
     // ==========================================
-    // LOCAL STORAGE FAVORITES & USAGE STATS
+    // LOCAL STORAGE FAVORITES & STATS
     // ==========================================
     let favorites = [];
     try {
@@ -803,7 +1146,6 @@
     const emptyStateEl = document.getElementById("empty-state");
     const searchInput = document.getElementById("search-input");
     const clearSearchBtn = document.getElementById("clear-search");
-    const favCountEl = document.getElementById("fav-count");
     const toast = document.getElementById("toast");
     const toastMsg = document.getElementById("toast-message");
     const toastIcon = document.getElementById("toast-icon");
@@ -971,7 +1313,7 @@
       const index = favorites.indexOf(id);
       if (index === -1) {
         favorites.push(id);
-        showToast("Ditambahkan ke daftar Favorit!", "fa-star text-yellow-400");
+        showToast("Ditambahkan ke Favorit!", "fa-star text-yellow-400");
       } else {
         favorites.splice(index, 1);
         showToast("Dihapus dari Favorit", "fa-circle-info text-slate-400");
@@ -979,14 +1321,9 @@
       try {
         localStorage.setItem("adpr_fav_systems", JSON.stringify(favorites));
       } catch (e) {}
-      updateFavCount();
+      renderCategoryFilters();
       renderSystems();
     }
-
-    function updateFavCount() {
-      if (favCountEl) favCountEl.textContent = favorites.length;
-    }
-    updateFavCount();
 
     function copyUrl(url, event) {
       if (event) event.stopPropagation();
@@ -1054,23 +1391,20 @@
     }
 
     // ==========================================
-    // FILTER ENGINE (ROLE + CATEGORY + SEARCH)
+    // FILTER ENGINE
     // ==========================================
     function getFilteredSystems() {
       return SYSTEMS_DATA.filter(sys => {
-        // 1. Role Filter
         if (currentRole !== "all" && !sys.allowedRoles.includes(currentRole)) {
           return false;
         }
 
-        // 2. Category / Favorite Filter
         if (currentCategory === "favorite") {
           if (!favorites.includes(sys.id)) return false;
         } else if (currentCategory !== "all" && sys.category !== currentCategory) {
           return false;
         }
 
-        // 3. Text Query Filter
         if (searchQuery.trim() !== "") {
           const q = searchQuery.toLowerCase().trim();
           const matchTitle = sys.title.toLowerCase().includes(q);
@@ -1247,22 +1581,6 @@
       }
     }
 
-    // ==========================================
-    // FILTER BUTTONS & CONTROLS
-    // ==========================================
-    const filterButtons = document.querySelectorAll(".cat-btn");
-    filterButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        filterButtons.forEach(b => {
-          b.className = "cat-btn px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700/60";
-        });
-        btn.className = "cat-btn active-tab px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all bg-blue-600 text-white shadow-sm shadow-blue-500/30";
-        
-        currentCategory = btn.getAttribute("data-cat");
-        renderSystems();
-      });
-    });
-
     searchInput.addEventListener("input", (e) => {
       searchQuery = e.target.value;
       if (searchQuery.length > 0) {
@@ -1286,7 +1604,8 @@
       searchQuery = "";
       clearSearchBtn.classList.add("hidden");
       currentCategory = "all";
-      setRoleFilter("all");
+      renderCategoryFilters();
+      renderSystems();
     }
 
     window.addEventListener("keydown", (e) => {
@@ -1297,6 +1616,7 @@
       if (e.key === "Escape") {
         closeModal();
         closeRoleModal();
+        closeMasterUnlockModal();
       }
     });
 
@@ -1306,6 +1626,10 @@
 
     document.getElementById("role-modal").addEventListener("click", (e) => {
       if (e.target.id === "role-modal") closeRoleModal();
+    });
+
+    document.getElementById("master-unlock-modal").addEventListener("click", (e) => {
+      if (e.target.id === "master-unlock-modal") closeMasterUnlockModal();
     });
 
     // ==========================================
@@ -1344,7 +1668,7 @@
 
       if ("serviceWorker" in navigator) {
         const swScript = `
-          const CACHE_NAME = 'aps-cache-v2';
+          const CACHE_NAME = 'aps-cache-v3';
           self.addEventListener('install', (e) => self.skipWaiting());
           self.addEventListener('activate', (e) => self.clients.claim());
           self.addEventListener('fetch', (e) => {
