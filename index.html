@@ -269,64 +269,36 @@
       </div>
     </div>
 
-    <!-- Controls: Search, View Mode Toggle & Category Filter Bar -->
-    <div class="mb-8 space-y-4">
-      <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
-        
-        <!-- Search Bar with Keyboard Hint -->
-        <div class="relative flex-1 max-w-md">
-          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-          <input 
-            type="search" 
-            id="search-input" 
-            placeholder="Cari modul... (Tekan '/' untuk fokus)" 
-            autocomplete="off"
-            autocorrect="off"
-            autocapitalize="off"
-            spellcheck="false"
-            name="system-search-field-query"
-            class="w-full pl-10 pr-10 py-2.5 rounded-xl bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm"
-          />
-          <button 
-            id="clear-search" 
-            class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1"
-            title="Bersihkan pencarian"
-          >
-            <i class="fa-solid fa-xmark text-xs"></i>
-          </button>
-        </div>
-
-        <!-- View Mode Switcher: Cards vs Table -->
-        <div class="flex items-center gap-2 self-end md:self-auto">
-          <div class="inline-flex rounded-xl bg-slate-200/70 dark:bg-slate-800/80 p-1 border border-slate-300/60 dark:border-slate-700/60 shadow-inner">
-            <button 
-              id="view-grid-btn" 
-              onclick="setViewMode('grid')" 
-              class="px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm"
-              title="Tampilan Kartu (Grid)"
-            >
-              <i class="fa-solid fa-grip"></i>
-              <span class="hidden sm:inline">Grid Card</span>
-            </button>
-            <button 
-              id="view-table-btn" 
-              onclick="setViewMode('table')" 
-              class="px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
-              title="Tampilan Tabel Ringkas (Compact Table)"
-            >
-              <i class="fa-solid fa-list-ul"></i>
-              <span class="hidden sm:inline">Compact List</span>
-            </button>
-          </div>
-        </div>
-
-      </div>
-
+    <!-- Controls: Category Filter Bar & View Mode Toggle -->
+    <div class="mb-8 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
       <!-- Filter Category Pills (Smart Filter: only shows relevant categories) -->
       <div class="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none" id="category-filters">
         <!-- Rendered dynamically -->
       </div>
 
+      <!-- View Mode Switcher: Cards vs Table -->
+      <div class="flex items-center gap-2 self-start sm:self-auto shrink-0">
+        <div class="inline-flex rounded-xl bg-slate-200/70 dark:bg-slate-800/80 p-1 border border-slate-300/60 dark:border-slate-700/60 shadow-inner">
+          <button 
+            id="view-grid-btn" 
+            onclick="setViewMode('grid')" 
+            class="px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm"
+            title="Tampilan Kartu (Grid)"
+          >
+            <i class="fa-solid fa-grip"></i>
+            <span class="hidden sm:inline">Grid Card</span>
+          </button>
+          <button 
+            id="view-table-btn" 
+            onclick="setViewMode('table')" 
+            class="px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+            title="Tampilan Tabel Ringkas (Compact Table)"
+          >
+            <i class="fa-solid fa-list-ul"></i>
+            <span class="hidden sm:inline">Compact List</span>
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- Main Container for Cards or Table -->
@@ -362,9 +334,9 @@
         <i class="fa-solid fa-lock"></i>
       </div>
       <h3 class="text-base font-semibold text-slate-800 dark:text-slate-200">Tidak ada modul yang cocok</h3>
-      <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-sm mx-auto" id="empty-state-text">Modul yang Anda cari tidak tersedia dalam wewenang divisi ini atau kata kunci tidak sesuai.</p>
+      <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-sm mx-auto" id="empty-state-text">Modul tidak tersedia dalam wewenang divisi ini atau kategori yang dipilih.</p>
       <button onclick="resetFilters()" class="mt-4 px-4 py-2 text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 hover:bg-blue-100 dark:hover:bg-blue-500/20 border border-blue-200 dark:border-blue-500/30 rounded-xl transition-all">
-        Reset Pencarian
+        Tampilkan Semua Modul
       </button>
     </div>
 
@@ -632,7 +604,7 @@
         color: "from-indigo-600 to-blue-700",
         badge: "Warehouse",
         tags: ["stock", "card", "kartu", "stok", "warehouse", "gudang", "sparepart", "inventaris"],
-        allowedRoles: ["all", "warehouse_admin", "storeman", "workshop_admin"]
+        allowedRoles: ["all", "warehouse_admin", "storeman","workshop_admin"]
       },
       {
         id: "recruitment_ktc",
@@ -652,7 +624,7 @@
         title: "Ujian Seleksi Admin",
         category: "hr",
         categoryLabel: "HR & Asesmen",
-        url: "https://adipranata-system.github.io/Ujian-KTC/",
+        url: "https://adipranata-system.github.io/UjianAdm-KTC/",
         description: "Portal asesmen online dan evaluasi kompetensi tertulis calon staf administrasi, pengarsipan, dan tata kelola kantor KTC.",
         icon: "fa-solid fa-file-signature",
         color: "from-emerald-500 to-green-600",
@@ -1138,7 +1110,6 @@
 
     let viewMode = localStorage.getItem("adpr_view_mode") || "grid";
     let currentCategory = "all";
-    let searchQuery = "";
     let activeModalSystemId = null;
 
     const gridEl = document.getElementById("systems-grid");
@@ -1149,8 +1120,6 @@
     const frequentSectionEl = document.getElementById("frequent-section");
     const frequentGridEl = document.getElementById("frequent-grid");
     const emptyStateEl = document.getElementById("empty-state");
-    const searchInput = document.getElementById("search-input");
-    const clearSearchBtn = document.getElementById("clear-search");
     const toast = document.getElementById("toast");
     const toastMsg = document.getElementById("toast-message");
     const toastIcon = document.getElementById("toast-icon");
@@ -1410,14 +1379,6 @@
           return false;
         }
 
-        if (searchQuery.trim() !== "") {
-          const q = searchQuery.toLowerCase().trim();
-          const matchTitle = sys.title.toLowerCase().includes(q);
-          const matchDesc = sys.description.toLowerCase().includes(q);
-          const matchTags = sys.tags.some(tag => tag.toLowerCase().includes(q));
-          return matchTitle || matchDesc || matchTags;
-        }
-
         return true;
       });
     }
@@ -1586,38 +1547,13 @@
       }
     }
 
-    searchInput.addEventListener("input", (e) => {
-      searchQuery = e.target.value;
-      if (searchQuery.length > 0) {
-        clearSearchBtn.classList.remove("hidden");
-      } else {
-        clearSearchBtn.classList.add("hidden");
-      }
-      renderSystems();
-    });
-
-    clearSearchBtn.addEventListener("click", () => {
-      searchInput.value = "";
-      searchQuery = "";
-      clearSearchBtn.classList.add("hidden");
-      searchInput.focus();
-      renderSystems();
-    });
-
     function resetFilters() {
-      searchInput.value = "";
-      searchQuery = "";
-      clearSearchBtn.classList.add("hidden");
       currentCategory = "all";
       renderCategoryFilters();
       renderSystems();
     }
 
     window.addEventListener("keydown", (e) => {
-      if (e.key === "/" && document.activeElement !== searchInput) {
-        e.preventDefault();
-        searchInput.focus();
-      }
       if (e.key === "Escape") {
         closeModal();
         closeRoleModal();
@@ -1720,13 +1656,6 @@
     // INITIALIZATION
     // ==========================================
     window.onload = function() {
-      // Pastikan kolom pencarian selalu bersih dari cache/autofill browser
-      const sInput = document.getElementById("search-input");
-      if (sInput) {
-        sInput.value = "";
-      }
-      searchQuery = "";
-
       initTheme();
       initRole();
       setViewMode(viewMode);
