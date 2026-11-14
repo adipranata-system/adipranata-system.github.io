@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Adi Pranata Systems Hub | Enterprise Portal</title>
+  <title>Adi Pranata Systems | Enterprise Portal</title>
   
   <!-- PWA Meta Tags & Theme Color -->
   <meta name="theme-color" content="#030712" id="meta-theme-color" />
@@ -131,7 +131,7 @@
             >
               Adi Pranata Systems
             </span>
-            <span class="hidden sm:inline-flex px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 shrink-0">v3.1</span>
+            <span class="hidden sm:inline-flex px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 shrink-0">v3.2</span>
           </div>
           <div class="flex items-center gap-1.5 mt-0.5">
             <p class="hidden sm:inline text-xs text-slate-500 dark:text-slate-400 shrink-0">Pusat Akses Sistem Kerja</p>
@@ -424,7 +424,7 @@
 
       <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-700/60 text-center">
         <span class="text-[11px] text-slate-400 font-mono flex items-center justify-center gap-1">
-          <i class="fa-solid fa-shield-halved text-emerald-500"></i> Validasi Kriptografi SHA-256
+          <i class="fa-solid fa-shield-halved text-emerald-500"></i> Validasi Kriptografi Terenkripsi
         </span>
       </div>
     </div>
@@ -555,17 +555,17 @@
         label: "Workshop Admin", 
         icon: "fa-solid fa-screwdriver-wrench", 
         color: "text-cyan-500",
-        description: "Konversi laporan breakdown unit ke format Telegram"
+        description: "Konversi laporan breakdown Telegram & monitoring KPI workshop"
       },
       hr: { 
         label: "HR & Rekrutmen", 
-        icon: "fa-solid fa-user-check", 
+        icon: "fa-solid fa-user-tie", 
         color: "text-emerald-500",
-        description: "Portal asesmen ujian online & rekrutmen tim KTC"
+        description: "Portal rekrutmen & asesmen ujian seleksi karyawan KTC"
       }
     };
 
-    // System registry dataset (9 Modul Aktif)
+    // System registry dataset (10 Modul Aktif)
     const SYSTEMS_DATA = [
       {
         id: "bd_converter",
@@ -579,6 +579,19 @@
         badge: "Workshop",
         tags: ["breakdown", "telegram", "converter", "unit", "workshop", "laporan"],
         allowedRoles: ["all", "workshop_admin"]
+      },
+      {
+        id: "machine_performance",
+        title: "Machine Performance System",
+        category: "ops",
+        categoryLabel: "Operasional & Workshop",
+        url: "https://adipranata-system.github.io/KPI_WS-KTC/",
+        description: "Sistem monitoring dan evaluasi KPI performa unit alat berat, tracking Physical Availability (PA), MTBF, dan kinerja operasional workshop KTC.",
+        icon: "fa-solid fa-gauge-high",
+        color: "from-sky-600 to-blue-700",
+        badge: "Workshop KPI",
+        tags: ["machine", "performance", "kpi", "workshop", "pa", "mtbf", "unit", "ktc"],
+        allowedRoles: ["all"]
       },
       {
         id: "log_dispense",
@@ -724,7 +737,7 @@
               currentRole = "all";
               isRoleLocked = false;
             } else {
-              // Jika belum auth tapi URL meminta master, kunci ke divisi default dan minta PIN
+              // Jika belum auth tapi URL meminta master, kunci ke divisi default
               currentRole = "storeman";
               isRoleLocked = true;
             }
@@ -784,11 +797,23 @@
 
         // Jika terotentikasi sebagai Master tapi sedang preview divisi tertentu
         if (isMasterAuthenticated) {
-          if (roleSwitchBtn) roleSwitchBtn.classList.remove("hidden");
-          if (masterLockBtn) masterLockBtn.classList.remove("hidden");
+          if (roleSwitchBtn) {
+            roleSwitchBtn.classList.remove("hidden");
+            roleSwitchBtn.classList.add("inline-flex");
+          }
+          if (masterLockBtn) {
+            masterLockBtn.classList.remove("hidden");
+            masterLockBtn.classList.add("inline-flex");
+          }
         } else {
-          if (roleSwitchBtn) roleSwitchBtn.classList.add("hidden");
-          if (masterLockBtn) masterLockBtn.classList.add("hidden");
+          if (roleSwitchBtn) {
+            roleSwitchBtn.classList.add("hidden");
+            roleSwitchBtn.classList.remove("inline-flex");
+          }
+          if (masterLockBtn) {
+            masterLockBtn.classList.add("hidden");
+            masterLockBtn.classList.remove("inline-flex");
+          }
         }
       } else {
         // TAMPILAN MASTER (ADI PRANATA - LENGKAP)
@@ -800,8 +825,14 @@
           </button>
         `;
         
-        if (roleSwitchBtn) roleSwitchBtn.classList.remove("hidden");
-        if (masterLockBtn) masterLockBtn.classList.remove("hidden");
+        if (roleSwitchBtn) {
+          roleSwitchBtn.classList.remove("hidden");
+          roleSwitchBtn.classList.add("inline-flex");
+        }
+        if (masterLockBtn) {
+          masterLockBtn.classList.remove("hidden");
+          masterLockBtn.classList.add("inline-flex");
+        }
 
         bannerEl.classList.add("hidden");
 
@@ -971,6 +1002,25 @@
       }
     }
 
+    // ==========================================
+    // LOCAL STORAGE FAVORITES & STATS
+    // ==========================================
+    let favorites = [];
+    try {
+      const stored = localStorage.getItem("adpr_fav_systems");
+      favorites = stored ? JSON.parse(stored) : [];
+    } catch (e) {
+      favorites = [];
+    }
+
+    let clickStats = {};
+    try {
+      const storedStats = localStorage.getItem("adpr_click_stats");
+      clickStats = storedStats ? JSON.parse(storedStats) : {};
+    } catch (e) {
+      clickStats = {};
+    }
+
     // Dynamic Category Filters
     function renderCategoryFilters() {
       const catFilterContainer = document.getElementById("category-filters");
@@ -1073,25 +1123,6 @@
       input.select();
       document.execCommand("copy");
       showToast("Tautan terkunci berhasil disalin! Siap dikirim ke tim.", "fa-circle-check text-emerald-500");
-    }
-
-    // ==========================================
-    // LOCAL STORAGE FAVORITES & STATS
-    // ==========================================
-    let favorites = [];
-    try {
-      const stored = localStorage.getItem("adpr_fav_systems");
-      favorites = stored ? JSON.parse(stored) : [];
-    } catch (e) {
-      favorites = [];
-    }
-
-    let clickStats = {};
-    try {
-      const storedStats = localStorage.getItem("adpr_click_stats");
-      clickStats = storedStats ? JSON.parse(storedStats) : {};
-    } catch (e) {
-      clickStats = {};
     }
 
     function isPwaMode() {
