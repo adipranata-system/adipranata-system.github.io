@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Adi Pranata Systems | Enterprise Portal</title>
+  <title>Adi Pranata Systems Hub | Enterprise Portal</title>
   
   <!-- PWA Meta Tags & Theme Color -->
   <meta name="theme-color" content="#030712" id="meta-theme-color" />
@@ -215,46 +215,46 @@
   </div>
 
   <!-- Main Content Container -->
-  <main class="relative z-10 flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+  <main class="relative z-10 flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-8">
     
-    <!-- Hero / Welcome Banner -->
-    <div class="mb-8 rounded-2xl bg-gradient-to-r from-blue-50/80 via-white to-slate-50 border border-slate-200 dark:from-slate-800/80 dark:via-slate-800/40 dark:to-slate-900/60 dark:border-slate-700/60 p-6 sm:p-8 backdrop-blur-md relative overflow-hidden shadow-sm transition-colors duration-200">
+    <!-- Hero / Welcome Banner (Lebih Ramping agar Kartu Langsung Terlihat) -->
+    <div class="mb-6 sm:mb-7 rounded-2xl bg-gradient-to-r from-blue-50/80 via-white to-slate-50 border border-slate-200 dark:from-slate-800/80 dark:via-slate-800/40 dark:to-slate-900/60 dark:border-slate-700/60 p-4 sm:p-6 backdrop-blur-md relative overflow-hidden shadow-sm transition-colors duration-200">
       <div class="absolute -right-8 -bottom-8 w-44 h-44 bg-blue-500/10 rounded-full blur-2xl pointer-events-none"></div>
-      <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div class="max-w-2xl">
-          <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight" id="hero-title">
+          <h1 class="text-lg sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight" id="hero-title">
             Pusat Akses Sistem & Aplikasi
           </h1>
-          <p class="mt-2 text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed" id="hero-subtitle">
+          <p class="mt-1 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed" id="hero-subtitle">
             Satu pintu masuk terintegrasi untuk monitoring gudang, pelaporan breakdown workshop, dan seleksi rekrutmen tim KTC.
           </p>
         </div>
 
         <!-- Quick Summary Metrics -->
-        <div class="flex items-center gap-3">
-          <div class="px-4 py-3 rounded-xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700/70 text-center min-w-[90px] shadow-sm">
-            <span id="metric-accessible" class="text-xl font-bold text-blue-600 dark:text-blue-400">0</span>
-            <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Modul Aktif</p>
+        <div class="flex items-center gap-2.5 sm:gap-3 shrink-0">
+          <div class="px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700/70 text-center min-w-[82px] sm:min-w-[90px] shadow-sm">
+            <span id="metric-accessible" class="text-base sm:text-xl font-bold text-blue-600 dark:text-blue-400">0</span>
+            <p class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 font-medium">Modul Aktif</p>
           </div>
-          <div class="px-4 py-3 rounded-xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700/70 text-center min-w-[90px] shadow-sm">
-            <span id="metric-role" class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block mt-1">LOCKED</span>
-            <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium mt-1">Otoritas Akses</p>
+          <div class="px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700/70 text-center min-w-[82px] sm:min-w-[90px] shadow-sm">
+            <span id="metric-role" class="text-[11px] sm:text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block mt-0.5 sm:mt-1">LOCKED</span>
+            <p class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 font-medium mt-0.5 sm:mt-1">Otoritas Akses</p>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Section: Paling Sering Digunakan (Smart Frequent) -->
-    <div id="frequent-section" class="mb-10 hidden">
-      <div class="flex items-center justify-between mb-4">
+    <!-- Section: Paling Sering Digunakan (Otomatis hanya tampil jika modul > 4 agar tidak duplikat) -->
+    <div id="frequent-section" class="mb-7 hidden">
+      <div class="flex items-center justify-between mb-3">
         <div class="flex items-center gap-2">
           <div class="h-6 w-6 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center text-xs">
             <i class="fa-solid fa-fire-flame-curved"></i>
           </div>
-          <h2 class="text-sm font-bold tracking-wider uppercase text-slate-700 dark:text-slate-300">
+          <h2 class="text-xs sm:text-sm font-bold tracking-wider uppercase text-slate-700 dark:text-slate-300">
             Sering Digunakan
           </h2>
-          <span class="text-xs text-slate-400 font-normal">(Riwayat klik)</span>
+          <span class="text-xs text-slate-400 font-normal hidden sm:inline">(Riwayat klik)</span>
         </div>
         <button 
           onclick="clearClickStats()" 
@@ -264,20 +264,20 @@
           <i class="fa-solid fa-arrow-rotate-left"></i> Reset
         </button>
       </div>
-      <div id="frequent-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div id="frequent-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
         <!-- Rendered dynamically -->
       </div>
     </div>
 
-    <!-- Controls: Category Filter Bar & View Mode Toggle -->
-    <div class="mb-8 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+    <!-- Controls: Category Filter Bar & Desktop View Mode Toggle -->
+    <div class="mb-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
       <!-- Filter Category Pills (Smart Filter: only shows relevant categories) -->
       <div class="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none" id="category-filters">
         <!-- Rendered dynamically -->
       </div>
 
-      <!-- View Mode Switcher: Cards vs Table -->
-      <div class="flex items-center gap-2 self-start sm:self-auto shrink-0">
+      <!-- View Mode Switcher: Cards vs Table (Hanya tampil di Desktop/Tablet, HP otomatis App Launcher 2 Kolom) -->
+      <div class="hidden sm:flex items-center gap-2 shrink-0">
         <div class="inline-flex rounded-xl bg-slate-200/70 dark:bg-slate-800/80 p-1 border border-slate-300/60 dark:border-slate-700/60 shadow-inner">
           <button 
             id="view-grid-btn" 
@@ -286,7 +286,7 @@
             title="Tampilan Kartu (Grid)"
           >
             <i class="fa-solid fa-grip"></i>
-            <span class="hidden sm:inline">Grid Card</span>
+            <span>Grid Card</span>
           </button>
           <button 
             id="view-table-btn" 
@@ -295,26 +295,25 @@
             title="Tampilan Tabel Ringkas (Compact Table)"
           >
             <i class="fa-solid fa-list-ul"></i>
-            <span class="hidden sm:inline">Compact List</span>
+            <span>Compact List</span>
           </button>
         </div>
       </div>
     </div>
 
-    <!-- Main Container for Cards or Table -->
+    <!-- Main Container for App Launcher Cards or Table -->
     <div id="systems-container">
-      <!-- Grid Container -->
-      <div id="systems-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <!-- Grid Container: 2 Kolom ala App Launcher di HP, 3 Kolom di Desktop -->
+      <div id="systems-grid" class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-5">
         <!-- Rendered dynamically -->
       </div>
 
-      <!-- Table/List Container -->
+      <!-- Table/List Container (Desktop Only) -->
       <div id="systems-table-wrap" class="hidden overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-800/60 backdrop-blur-md shadow-sm">
         <div class="overflow-x-auto">
           <table class="w-full text-left text-sm">
             <thead class="bg-slate-100/80 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider">
               <tr>
-                <th scope="col" class="py-3.5 px-4 w-12 text-center">Fav</th>
                 <th scope="col" class="py-3.5 px-4">Nama Sistem & Kategori</th>
                 <th scope="col" class="py-3.5 px-4 hidden md:table-cell">Deskripsi Singkat</th>
                 <th scope="col" class="py-3.5 px-4 text-center">Akses Cepat</th>
@@ -473,39 +472,6 @@
     </div>
   </div>
 
-  <!-- Quick Info / Detail Modal -->
-  <div id="info-modal" class="fixed inset-0 z-50 bg-black/60 dark:bg-black/75 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
-      <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-white p-2">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-      <div class="flex items-center gap-3 mb-4">
-        <div id="modal-icon-container" class="w-12 h-12 rounded-xl flex items-center justify-center text-xl text-white"></div>
-        <div>
-          <h3 id="modal-title" class="text-lg font-bold text-slate-900 dark:text-white"></h3>
-          <span id="modal-category" class="text-xs text-slate-500 dark:text-slate-400 font-medium"></span>
-        </div>
-      </div>
-      <div class="space-y-3 text-sm text-slate-600 dark:text-slate-300">
-        <p id="modal-desc" class="leading-relaxed"></p>
-        <div class="p-3 bg-slate-50 dark:bg-slate-900/80 rounded-xl border border-slate-200 dark:border-slate-700/60 break-all text-xs font-mono text-blue-600 dark:text-blue-400 flex items-center justify-between gap-2">
-          <span id="modal-url"></span>
-          <button id="modal-copy-btn" class="text-slate-400 hover:text-slate-600 dark:hover:text-white p-1 text-sm" title="Salin URL">
-            <i class="fa-regular fa-copy"></i>
-          </button>
-        </div>
-      </div>
-      <div class="mt-6 flex gap-3">
-        <a id="modal-launch-btn" href="#" target="_blank" rel="noopener noreferrer" class="flex-1 py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-center text-sm shadow-md transition-all">
-          Buka Sistem Sekarang <i class="fa-solid fa-arrow-up-right-from-square ml-1.5 text-xs"></i>
-        </a>
-        <button onclick="closeModal()" class="py-2.5 px-4 rounded-xl bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 text-sm font-medium">
-          Tutup
-        </button>
-      </div>
-    </div>
-  </div>
-
   <!-- Application Logic & Locked RBAC Engine -->
   <script>
     // ==========================================
@@ -586,7 +552,7 @@
         category: "ops",
         categoryLabel: "Operasional & Workshop",
         url: "https://adipranata-system.github.io/KPI_WS-KTC/",
-        description: "Sistem monitoring dan evaluasi KPI performa unit alat berat, tracking PA, MA, UA, MTTR dan MTBF operasional PT.KTC.",
+        description: "Sistem monitoring dan evaluasi KPI performa unit alat berat, tracking PA, MA, UA, MTTR dan MTBF operasional PT. KTC.",
         icon: "fa-solid fa-gauge-high",
         color: "from-sky-600 to-blue-700",
         badge: "Workshop KPI",
@@ -617,7 +583,7 @@
         color: "from-indigo-600 to-blue-700",
         badge: "Warehouse",
         tags: ["stock", "card", "kartu", "stok", "warehouse", "gudang", "sparepart", "inventaris"],
-        allowedRoles: ["all", "warehouse_admin", "storeman","workshop_admin"]
+        allowedRoles: ["all", "warehouse_admin", "storeman", "workshop_admin"]
       },
       {
         id: "recruitment_ktc",
@@ -722,7 +688,7 @@
         const urlParams = new URLSearchParams(window.location.search);
         const roleParam = urlParams.get("role");
 
-        // Cek apakah perangkat sudah diotentikasi sebagai Master sebelumnya (Opsi B: Tersimpan di Perangkat)
+        // Cek apakah perangkat sudah diotentikasi sebagai Master sebelumnya (Tersimpan di Perangkat)
         const savedAuth = localStorage.getItem("adpr_master_authenticated");
         isMasterAuthenticated = (savedAuth === "true");
 
@@ -737,13 +703,11 @@
               currentRole = "all";
               isRoleLocked = false;
             } else {
-              // Jika belum auth tapi URL meminta master, kunci ke divisi default
               currentRole = "storeman";
               isRoleLocked = true;
             }
           }
         } else {
-          // Tidak ada parameter role di URL
           if (isMasterAuthenticated) {
             const savedRole = localStorage.getItem("adpr_active_role");
             currentRole = (savedRole && ROLE_CONFIG[savedRole]) ? savedRole : "all";
@@ -754,7 +718,6 @@
               currentRole = savedRole;
               isRoleLocked = true;
             } else {
-              // Perangkat belum diautentikasi dan membuka link polos: default ke Storeman terkunci
               currentRole = "storeman";
               isRoleLocked = true;
             }
@@ -781,7 +744,6 @@
       const heroSubtitle = document.getElementById("hero-subtitle");
 
       if (isRoleLocked || !isMasterAuthenticated || currentRole !== "all") {
-        // TAMPILAN TERKUNCI (DIVISI)
         roleBadgeContainer.innerHTML = `
           <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-slate-200/80 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-[11px] font-semibold cursor-default select-none shadow-sm" title="Akses Divisi Terkunci">
             <i class="fa-solid fa-lock text-[9px] text-amber-500"></i>
@@ -795,7 +757,6 @@
         if (metricRoleEl) metricRoleEl.textContent = roleData.label.toUpperCase();
         if (heroSubtitle) heroSubtitle.textContent = `Pusat akses modul operasional yang dikhususkan untuk wewenang divisi ${roleData.label}.`;
 
-        // Jika terotentikasi sebagai Master tapi sedang preview divisi tertentu
         if (isMasterAuthenticated) {
           if (roleSwitchBtn) {
             roleSwitchBtn.classList.remove("hidden");
@@ -816,7 +777,6 @@
           }
         }
       } else {
-        // TAMPILAN MASTER (ADI PRANATA - LENGKAP)
         roleBadgeContainer.innerHTML = `
           <button onclick="openRoleModal()" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 text-[10px] sm:text-[11px] font-semibold hover:bg-amber-500/20 transition-all max-w-[170px] sm:max-w-none" title="Klik untuk mengelola & membagikan tautan divisi">
             <i class="fa-solid fa-crown text-[9px] text-amber-500"></i>
@@ -852,6 +812,7 @@
     function setRoleFilter(roleKey) {
       const normalized = normalizeRoleKey(roleKey) || "all";
       currentRole = normalized;
+      currentCategory = "all";
       
       if (currentRole === "all") {
         isRoleLocked = false;
@@ -892,12 +853,10 @@
       tapCounter++;
       clearTimeout(tapTimer);
       
-      // Reset jika jeda antar-ketukan melebihi 1.5 detik
       tapTimer = setTimeout(() => {
         tapCounter = 0;
       }, 1500);
 
-      // Ketukan ke-3 memicu pop-up rahasia
       if (tapCounter >= 3) {
         tapCounter = 0;
         openMasterUnlockModal();
@@ -959,7 +918,7 @@
         if (errorEl) errorEl.classList.remove("hidden");
         if (modalBox) {
           modalBox.classList.remove("shake-anim");
-          void modalBox.offsetWidth; // trigger reflow
+          void modalBox.offsetWidth;
           modalBox.classList.add("shake-anim");
         }
         input.select();
@@ -973,46 +932,37 @@
       }
     });
 
-    // Kunci Kembali (Logout Master)
+    // Kunci Kembali (Logout Master tanpa dialog confirm)
     function lockMasterSession() {
-      if (confirm("Kunci akses Master pada perangkat ini? Anda perlu memasukkan PIN kembali untuk membuka seluruh modul.")) {
-        isMasterAuthenticated = false;
-        try {
-          localStorage.removeItem("adpr_master_authenticated");
-          localStorage.removeItem("adpr_master_hash_cache");
-          localStorage.setItem("adpr_active_role", "storeman");
-        } catch (e) {}
+      isMasterAuthenticated = false;
+      try {
+        localStorage.removeItem("adpr_master_authenticated");
+        localStorage.removeItem("adpr_master_hash_cache");
+        localStorage.setItem("adpr_active_role", "storeman");
+      } catch (e) {}
 
-        currentRole = "storeman";
-        isRoleLocked = true;
+      currentRole = "storeman";
+      currentCategory = "all";
+      isRoleLocked = true;
 
-        try {
-          if (!window.location.href.startsWith("blob:") && window.location.protocol.startsWith("http")) {
-            const newUrl = new URL(window.location.href);
-            newUrl.searchParams.set("role", "storeman");
-            window.history.replaceState({}, "", newUrl.toString());
-          }
-        } catch (e) {}
+      try {
+        if (!window.location.href.startsWith("blob:") && window.location.protocol.startsWith("http")) {
+          const newUrl = new URL(window.location.href);
+          newUrl.searchParams.set("role", "storeman");
+          window.history.replaceState({}, "", newUrl.toString());
+        }
+      } catch (e) {}
 
-        applyRoleUI();
-        renderCategoryFilters();
-        renderFrequentSection();
-        renderSystems();
-        showToast("Hak akses Master telah dicabut. Portal kembali terkunci.", "fa-lock text-amber-400");
-      }
+      applyRoleUI();
+      renderCategoryFilters();
+      renderFrequentSection();
+      renderSystems();
+      showToast("Hak akses Master telah dicabut. Portal kembali terkunci.", "fa-lock text-amber-400");
     }
 
     // ==========================================
-    // LOCAL STORAGE FAVORITES & STATS
+    // LOCAL STORAGE STATS
     // ==========================================
-    let favorites = [];
-    try {
-      const stored = localStorage.getItem("adpr_fav_systems");
-      favorites = stored ? JSON.parse(stored) : [];
-    } catch (e) {
-      favorites = [];
-    }
-
     let clickStats = {};
     try {
       const storedStats = localStorage.getItem("adpr_click_stats");
@@ -1021,11 +971,17 @@
       clickStats = {};
     }
 
-    // Dynamic Category Filters
+    // Dynamic Category Filters (Tanpa Tab Favorit)
     function renderCategoryFilters() {
       const catFilterContainer = document.getElementById("category-filters");
       const accessibleSystems = SYSTEMS_DATA.filter(sys => currentRole === "all" || sys.allowedRoles.includes(currentRole));
       const availableCategories = new Set(accessibleSystems.map(s => s.category));
+
+      // Jika kategori hanya 1 dan jumlah modul sedikit, sembunyikan bar kategori agar tampilan semakin bersih
+      if (availableCategories.size <= 1 && accessibleSystems.length <= 3) {
+        catFilterContainer.innerHTML = "";
+        return;
+      }
 
       let html = `
         <button data-cat="all" class="cat-btn active-tab px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all bg-blue-600 text-white shadow-sm shadow-blue-500/30">
@@ -1056,12 +1012,6 @@
           </button>
         `;
       }
-
-      html += `
-        <button data-cat="favorite" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700/60">
-          <i class="fa-solid fa-star mr-1.5 text-yellow-400"></i>Favorit (<span id="fav-count">${favorites.length}</span>)
-        </button>
-      `;
 
       catFilterContainer.innerHTML = html;
 
@@ -1141,7 +1091,6 @@
 
     let viewMode = localStorage.getItem("adpr_view_mode") || "grid";
     let currentCategory = "all";
-    let activeModalSystemId = null;
 
     const gridEl = document.getElementById("systems-grid");
     const tableWrapEl = document.getElementById("systems-table-wrap");
@@ -1197,17 +1146,22 @@
     // VIEW MODE
     // ==========================================
     function setViewMode(mode) {
+      // Di layar HP (< 640px), paksa selalu menggunakan tampilan App Launcher Grid 2 Kolom
+      if (window.innerWidth < 640) {
+        mode = "grid";
+      }
+
       viewMode = mode;
       localStorage.setItem("adpr_view_mode", mode);
       
       if (mode === "grid") {
-        viewGridBtn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm";
-        viewTableBtn.className = "px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white";
+        if (viewGridBtn) viewGridBtn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm";
+        if (viewTableBtn) viewTableBtn.className = "px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white";
         gridEl.classList.remove("hidden");
         tableWrapEl.classList.add("hidden");
       } else {
-        viewTableBtn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm";
-        viewGridBtn.className = "px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white";
+        if (viewTableBtn) viewTableBtn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm";
+        if (viewGridBtn) viewGridBtn.className = "px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white";
         gridEl.classList.add("hidden");
         tableWrapEl.classList.remove("hidden");
       }
@@ -1234,8 +1188,14 @@
 
     function renderFrequentSection() {
       const filteredByRole = SYSTEMS_DATA.filter(sys => currentRole === "all" || sys.allowedRoles.includes(currentRole));
-      const accessibleIds = filteredByRole.map(s => s.id);
+      
+      // Sembunyikan bagian "Sering Digunakan" jika divisi hanya memiliki <= 4 modul agar tidak duplikat dengan kartu di bawah
+      if (filteredByRole.length <= 4) {
+        frequentSectionEl.classList.add("hidden");
+        return;
+      }
 
+      const accessibleIds = filteredByRole.map(s => s.id);
       const keys = Object.keys(clickStats).filter(id => (clickStats[id] || 0) > 0 && accessibleIds.includes(id));
       if (keys.length === 0) {
         frequentSectionEl.classList.add("hidden");
@@ -1254,7 +1214,12 @@
       frequentGridEl.innerHTML = topItems.map(sys => {
         const count = clickStats[sys.id] || 0;
         return `
-          <div class="glass-card rounded-2xl p-4 flex items-center justify-between gap-3 shadow-sm hover:border-blue-500/40 transition-all group">
+          <a 
+            href="${sys.url}" 
+            ${isPwaMode() ? '' : 'target="_blank" rel="noopener noreferrer"'} 
+            onclick="handleSystemLaunch(event, '${sys.url}', '${sys.id}')"
+            class="glass-card rounded-2xl p-3.5 flex items-center justify-between gap-3 shadow-sm hover:border-blue-500/40 active:scale-[0.98] transition-all group"
+          >
             <div class="flex items-center gap-3 min-w-0">
               <div class="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-tr ${sys.color} flex items-center justify-center text-white text-sm shadow-md group-hover:scale-105 transition-transform">
                 <i class="${sys.icon}"></i>
@@ -1270,22 +1235,34 @@
                 </div>
               </div>
             </div>
-            <a 
-              href="${sys.url}" 
-              ${isPwaMode() ? '' : 'target="_blank" rel="noopener noreferrer"'} 
-              onclick="handleSystemLaunch(event, '${sys.url}', '${sys.id}')"
-              class="shrink-0 h-8 px-3 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow-sm transition-all"
-            >
+            <span class="shrink-0 h-8 px-3 rounded-lg bg-blue-600 group-hover:bg-blue-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow-sm transition-all">
               <span>Buka</span>
               <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
-            </a>
-          </div>
+            </span>
+          </a>
         `;
       }).join("");
     }
 
     // ==========================================
-    // CLOCK & CALENDAR
+    // TOAST NOTIFICATION
+    // ==========================================
+    let toastTimeout = null;
+    function showToast(message, iconClass) {
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastMsg.textContent = message;
+      toastIcon.className = `fa-solid ${iconClass} text-lg`;
+      toast.classList.remove("translate-y-20", "opacity-0");
+      toast.classList.add("translate-y-0", "opacity-100");
+      
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove("translate-y-0", "opacity-100");
+        toast.classList.add("translate-y-20", "opacity-0");
+      }, 2600);
+    }
+
+    // ==========================================
+    // LIVE CLOCK & CALENDAR
     // ==========================================
     function updateClock() {
       const now = new Date();
@@ -1311,92 +1288,7 @@
     updateClock();
 
     // ==========================================
-    // FAVORITES & TOAST
-    // ==========================================
-    function toggleFavorite(id, event) {
-      if (event) event.stopPropagation();
-      const index = favorites.indexOf(id);
-      if (index === -1) {
-        favorites.push(id);
-        showToast("Ditambahkan ke Favorit!", "fa-star text-yellow-400");
-      } else {
-        favorites.splice(index, 1);
-        showToast("Dihapus dari Favorit", "fa-circle-info text-slate-400");
-      }
-      try {
-        localStorage.setItem("adpr_fav_systems", JSON.stringify(favorites));
-      } catch (e) {}
-      renderCategoryFilters();
-      renderSystems();
-    }
-
-    function copyUrl(url, event) {
-      if (event) event.stopPropagation();
-      const tempInput = document.createElement("input");
-      tempInput.value = url;
-      document.body.appendChild(tempInput);
-      tempInput.select();
-      try {
-        document.execCommand("copy");
-        showToast("Tautan portal berhasil disalin ke clipboard!", "fa-circle-check text-emerald-500");
-      } catch (err) {
-        showToast("Gagal menyalin tautan", "fa-circle-xmark text-rose-500");
-      }
-      document.body.removeChild(tempInput);
-    }
-
-    let toastTimeout = null;
-    function showToast(message, iconClass) {
-      if (toastTimeout) clearTimeout(toastTimeout);
-      toastMsg.textContent = message;
-      toastIcon.className = `fa-solid ${iconClass} text-lg`;
-      toast.classList.remove("translate-y-20", "opacity-0");
-      toast.classList.add("translate-y-0", "opacity-100");
-      
-      toastTimeout = setTimeout(() => {
-        toast.classList.remove("translate-y-0", "opacity-100");
-        toast.classList.add("translate-y-20", "opacity-0");
-      }, 2600);
-    }
-
-    function openModal(id) {
-      const item = SYSTEMS_DATA.find(s => s.id === id);
-      if (!item) return;
-
-      activeModalSystemId = id;
-      document.getElementById("modal-title").textContent = item.title;
-      document.getElementById("modal-category").textContent = item.categoryLabel;
-      document.getElementById("modal-desc").textContent = item.description;
-      document.getElementById("modal-url").textContent = item.url;
-      
-      const modalIcon = document.getElementById("modal-icon-container");
-      modalIcon.className = `w-12 h-12 rounded-xl flex items-center justify-center text-xl text-white bg-gradient-to-tr ${item.color} shadow-lg`;
-      modalIcon.innerHTML = `<i class="${item.icon}"></i>`;
-
-      const launchBtn = document.getElementById("modal-launch-btn");
-      launchBtn.href = item.url;
-      if (isPwaMode()) {
-        launchBtn.removeAttribute("target");
-        launchBtn.removeAttribute("rel");
-      } else {
-        launchBtn.setAttribute("target", "_blank");
-        launchBtn.setAttribute("rel", "noopener noreferrer");
-      }
-      launchBtn.onclick = (e) => handleSystemLaunch(e, item.url, item.id);
-
-      const copyBtn = document.getElementById("modal-copy-btn");
-      copyBtn.onclick = () => copyUrl(item.url);
-
-      document.getElementById("info-modal").classList.remove("hidden");
-    }
-
-    function closeModal() {
-      document.getElementById("info-modal").classList.add("hidden");
-      activeModalSystemId = null;
-    }
-
-    // ==========================================
-    // FILTER ENGINE
+    // FILTER & APP LAUNCHER RENDER ENGINE
     // ==========================================
     function getFilteredSystems() {
       return SYSTEMS_DATA.filter(sys => {
@@ -1404,9 +1296,7 @@
           return false;
         }
 
-        if (currentCategory === "favorite") {
-          if (!favorites.includes(sys.id)) return false;
-        } else if (currentCategory !== "all" && sys.category !== currentCategory) {
+        if (currentCategory !== "all" && sys.category !== currentCategory) {
           return false;
         }
 
@@ -1432,102 +1322,65 @@
 
       if (viewMode === "grid") {
         gridEl.innerHTML = items.map(sys => {
-          const isFav = favorites.includes(sys.id);
           const clicks = clickStats[sys.id] || 0;
           return `
-            <div class="glass-card rounded-2xl p-5 flex flex-col justify-between transition-all duration-300 relative group shadow-sm">
-              <div>
-                <div class="flex items-start justify-between gap-3 mb-4">
-                  <div class="h-12 w-12 rounded-xl bg-gradient-to-tr ${sys.color} flex items-center justify-center text-white text-lg shadow-md shadow-slate-900/20 ring-1 ring-white/10 group-hover:scale-105 transition-transform duration-300">
+            <a 
+              href="${sys.url}" 
+              ${isPwaMode() ? '' : 'target="_blank" rel="noopener noreferrer"'} 
+              onclick="handleSystemLaunch(event, '${sys.url}', '${sys.id}')"
+              class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col items-center sm:items-stretch text-center sm:text-left justify-between transition-all duration-200 relative group shadow-sm hover:-translate-y-0.5 active:scale-[0.97] cursor-pointer select-none"
+            >
+              <div class="w-full flex flex-col items-center sm:items-stretch">
+                <!-- App Icon & Badge Row -->
+                <div class="flex flex-col sm:flex-row items-center sm:items-start justify-center sm:justify-between gap-2.5 sm:gap-3 mb-3 sm:mb-4">
+                  <!-- Ikon Besar ala Smartphone App Launcher di HP (56px), Proporsional di Desktop (52px) -->
+                  <div class="h-14 w-14 sm:h-[52px] sm:w-[52px] rounded-2xl bg-gradient-to-tr ${sys.color} flex items-center justify-center text-white text-2xl sm:text-xl shadow-lg shadow-blue-900/15 ring-1 ring-white/20 group-hover:scale-105 transition-transform duration-300">
                     <i class="${sys.icon}"></i>
                   </div>
 
-                  <div class="flex items-center gap-1.5">
-                    <span class="px-2.5 py-1 text-[11px] font-semibold rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700/60">
-                      ${sys.badge}
-                    </span>
-
-                    <button 
-                      onclick="toggleFavorite('${sys.id}', event)" 
-                      class="h-8 w-8 rounded-lg flex items-center justify-center transition-all ${isFav ? 'text-yellow-400 bg-yellow-400/10' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'}"
-                      title="${isFav ? 'Hapus dari favorit' : 'Jadikan favorit'}"
-                    >
-                      <i class="fa-${isFav ? 'solid' : 'regular'} fa-star text-sm"></i>
-                    </button>
-                  </div>
+                  <span class="px-2.5 py-0.5 sm:py-1 text-[10px] sm:text-[11px] font-semibold rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700/60">
+                    ${sys.badge}
+                  </span>
                 </div>
 
-                <h2 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-1">
+                <!-- Judul Sistem -->
+                <h2 class="text-xs sm:text-base font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 sm:line-clamp-1 leading-snug">
                   ${sys.title}
                 </h2>
                 
-                <div class="flex items-center gap-2 mt-1 mb-3">
-                  <span class="inline-flex items-center gap-1 text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Online
-                  </span>
-                  <span class="text-slate-400 dark:text-slate-600 text-[10px]">&bull;</span>
+                <!-- Metadata Kategori (Khusus Desktop agar HP tetap bersih ala Launcher) -->
+                <div class="hidden sm:flex items-center gap-2 mt-1 mb-3">
                   <span class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">${sys.categoryLabel}</span>
                   ${clicks > 0 ? `
                     <span class="text-slate-400 dark:text-slate-600 text-[10px]">&bull;</span>
-                    <span class="text-[10px] text-amber-500 font-medium">${clicks}x</span>
+                    <span class="text-[10px] text-amber-500 font-semibold">${clicks}x dibuka</span>
                   ` : ''}
                 </div>
 
-                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-6 line-clamp-3">
+                <!-- Deskripsi Lengkap (Khusus Desktop) -->
+                <p class="hidden sm:block text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-5 line-clamp-3">
                   ${sys.description}
                 </p>
               </div>
 
-              <div class="pt-4 border-t border-slate-100 dark:border-slate-700/50 flex items-center gap-2">
-                <a 
-                  href="${sys.url}" 
-                  ${isPwaMode() ? '' : 'target="_blank" rel="noopener noreferrer"'} 
-                  onclick="handleSystemLaunch(event, '${sys.url}', '${sys.id}')"
-                  class="flex-1 inline-flex items-center justify-center gap-2 py-2 px-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-sm hover:shadow-blue-500/20 transition-all duration-200"
-                >
+              <!-- Footer Aksi Utama (Full-Width Clean CTA) -->
+              <div class="w-full mt-3 sm:mt-0 pt-2.5 sm:pt-3.5 border-t border-slate-100 dark:border-slate-700/50 flex items-center justify-center">
+                <span class="w-full inline-flex items-center justify-center gap-1.5 py-1.5 sm:py-2 px-3 rounded-xl bg-blue-600/10 group-hover:bg-blue-600 text-blue-600 dark:text-blue-400 group-hover:text-white text-[11px] sm:text-xs font-semibold transition-all duration-200">
                   <span>Buka Sistem</span>
-                  <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
-                </a>
-
-                <button 
-                  onclick="copyUrl('${sys.url}', event)" 
-                  class="p-2 h-9 w-9 flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-100 border border-slate-200 dark:border-slate-700/60 transition-all"
-                  title="Salin Link Sistem"
-                >
-                  <i class="fa-regular fa-copy text-xs"></i>
-                </button>
-
-                <button 
-                  onclick="openModal('${sys.id}')" 
-                  class="p-2 h-9 w-9 flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-100 border border-slate-200 dark:border-slate-700/60 transition-all"
-                  title="Lihat Detail"
-                >
-                  <i class="fa-solid fa-circle-info text-xs"></i>
-                </button>
+                  <i class="fa-solid fa-arrow-up-right-from-square text-[9px] sm:text-[10px]"></i>
+                </span>
               </div>
-
-            </div>
+            </a>
           `;
         }).join("");
       } else {
         tableBodyEl.innerHTML = items.map(sys => {
-          const isFav = favorites.includes(sys.id);
           const clicks = clickStats[sys.id] || 0;
           return `
             <tr class="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-colors">
-              <td class="py-3 px-4 text-center">
-                <button 
-                  onclick="toggleFavorite('${sys.id}', event)" 
-                  class="h-7 w-7 rounded-lg inline-flex items-center justify-center transition-all ${isFav ? 'text-yellow-400 bg-yellow-400/10' : 'text-slate-300 dark:text-slate-600 hover:text-yellow-400'}"
-                  title="${isFav ? 'Hapus favorit' : 'Favoritkan'}"
-                >
-                  <i class="fa-${isFav ? 'solid' : 'regular'} fa-star text-xs"></i>
-                </button>
-              </td>
-
               <td class="py-3 px-4">
                 <div class="flex items-center gap-3">
-                  <div class="h-9 w-9 shrink-0 rounded-lg bg-gradient-to-tr ${sys.color} flex items-center justify-center text-white text-xs shadow-sm">
+                  <div class="h-9 w-9 shrink-0 rounded-xl bg-gradient-to-tr ${sys.color} flex items-center justify-center text-white text-xs shadow-sm">
                     <i class="${sys.icon}"></i>
                   </div>
                   <div>
@@ -1541,36 +1394,20 @@
                 </div>
               </td>
 
-              <td class="py-3 px-4 hidden md:table-cell text-xs text-slate-600 dark:text-slate-400 max-w-xs truncate">
+              <td class="py-3 px-4 hidden md:table-cell text-xs text-slate-600 dark:text-slate-400 max-w-md truncate">
                 ${sys.description}
               </td>
 
               <td class="py-3 px-4 text-center">
-                <div class="flex items-center justify-center gap-1.5">
-                  <a 
-                    href="${sys.url}" 
-                    ${isPwaMode() ? '' : 'target="_blank" rel="noopener noreferrer"'} 
-                    onclick="handleSystemLaunch(event, '${sys.url}', '${sys.id}')"
-                    class="py-1.5 px-3 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold inline-flex items-center gap-1 shadow-sm transition-all"
-                  >
-                    <span>Buka</span>
-                    <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
-                  </a>
-                  <button 
-                    onclick="copyUrl('${sys.url}', event)" 
-                    class="p-1.5 h-8 w-8 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all inline-flex items-center justify-center"
-                    title="Salin Link"
-                  >
-                    <i class="fa-regular fa-copy text-xs"></i>
-                  </button>
-                  <button 
-                    onclick="openModal('${sys.id}')" 
-                    class="p-1.5 h-8 w-8 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all inline-flex items-center justify-center"
-                    title="Detail"
-                  >
-                    <i class="fa-solid fa-circle-info text-xs"></i>
-                  </button>
-                </div>
+                <a 
+                  href="${sys.url}" 
+                  ${isPwaMode() ? '' : 'target="_blank" rel="noopener noreferrer"'} 
+                  onclick="handleSystemLaunch(event, '${sys.url}', '${sys.id}')"
+                  class="py-1.5 px-3.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold inline-flex items-center gap-1.5 shadow-sm transition-all"
+                >
+                  <span>Buka Sistem</span>
+                  <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                </a>
               </td>
             </tr>
           `;
@@ -1586,14 +1423,9 @@
 
     window.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
-        closeModal();
         closeRoleModal();
         closeMasterUnlockModal();
       }
-    });
-
-    document.getElementById("info-modal").addEventListener("click", (e) => {
-      if (e.target.id === "info-modal") closeModal();
     });
 
     document.getElementById("role-modal").addEventListener("click", (e) => {
@@ -1609,8 +1441,8 @@
     // ==========================================
     function setupPWA() {
       const manifest = {
-        name: "AP Systems",
-        short_name: "AP Systems",
+        name: "Adi Pranata Central Systems Hub",
+        short_name: "Adi Systems",
         description: "Pusat Akses Sistem & Aplikasi Adi Pranata",
         start_url: window.location.origin + "/",
         scope: "/",
