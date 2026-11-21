@@ -187,6 +187,17 @@
           <span class="hidden md:inline ml-1.5">Install App</span>
         </button>
 
+        <!-- Hard Refresh / Sync Portal Button (Memuat ulang modul terbaru di PWA) -->
+        <button 
+          id="refresh-portal-btn" 
+          onclick="hardRefreshPortal()"
+          class="h-8 w-8 sm:h-10 sm:w-10 rounded-xl flex items-center justify-center bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700/80 transition-all shadow-sm shrink-0 active:scale-95" 
+          title="Muat Ulang & Sinkronkan Modul Terbaru"
+          aria-label="Muat Ulang Portal"
+        >
+          <i id="refresh-portal-icon" class="fa-solid fa-arrows-rotate text-xs sm:text-sm"></i>
+        </button>
+
         <!-- Theme Toggle Button -->
         <button 
           id="theme-toggle" 
@@ -477,24 +488,17 @@
     // ==========================================
     // SECURITY & ROLES CONFIGURATION
     // ==========================================
-    // Token verifikasi aman terenkripsi (Aman dari Ctrl + U & kebal pencarian teks)
-    // Mencocokkan PIN "Banjarmasin01" secara presisi & deterministik
     const MASTER_SIG = "Edqmdupdvlq34"; 
 
     async function verifyMasterCredentials(inputPin) {
       if (!inputPin) return false;
       const cleanInput = inputPin.trim();
-      
       try {
-        // Enkripsi shift deterministik (+3 ASCII) untuk memvalidasi input tanpa menyimpan teks polos di source code
         const encoded = Array.from(cleanInput).map(c => String.fromCharCode(c.charCodeAt(0) + 3)).join('');
-        
-        // Menerima "Banjarmasin01" secara presisi (dan toleran jika huruf 'b' kecil pada keyboard ponsel)
         if (encoded === MASTER_SIG || encoded === "edqmdupdvlq34") {
           return true;
         }
       } catch (e) {}
-
       return false;
     }
 
@@ -688,7 +692,6 @@
         const urlParams = new URLSearchParams(window.location.search);
         const roleParam = urlParams.get("role");
 
-        // Cek apakah perangkat sudah diotentikasi sebagai Master sebelumnya (Tersimpan di Perangkat)
         const savedAuth = localStorage.getItem("adpr_master_authenticated");
         isMasterAuthenticated = (savedAuth === "true");
 
@@ -932,7 +935,6 @@
       }
     });
 
-    // Kunci Kembali (Logout Master tanpa dialog confirm)
     function lockMasterSession() {
       isMasterAuthenticated = false;
       try {
@@ -961,7 +963,7 @@
     }
 
     // ==========================================
-    // LOCAL STORAGE STATS
+    // LOCAL STORAGE STATS & CATEGORY FILTERS
     // ==========================================
     let clickStats = {};
     try {
@@ -971,13 +973,11 @@
       clickStats = {};
     }
 
-    // Dynamic Category Filters (Tanpa Tab Favorit)
     function renderCategoryFilters() {
       const catFilterContainer = document.getElementById("category-filters");
       const accessibleSystems = SYSTEMS_DATA.filter(sys => currentRole === "all" || sys.allowedRoles.includes(currentRole));
       const availableCategories = new Set(accessibleSystems.map(s => s.category));
 
-      // Jika kategori hanya 1 dan jumlah modul sedikit, sembunyikan bar kategori agar tampilan semakin bersih
       if (availableCategories.size <= 1 && accessibleSystems.length <= 3) {
         catFilterContainer.innerHTML = "";
         return;
@@ -1015,7 +1015,6 @@
 
       catFilterContainer.innerHTML = html;
 
-      // Rebind events
       const filterButtons = document.querySelectorAll(".cat-btn");
       filterButtons.forEach(btn => {
         btn.addEventListener("click", () => {
@@ -1141,6 +1140,33 @@
       const isDark = document.documentElement.classList.contains("dark");
       setTheme(isDark ? "light" : "dark");
     });
+
+    // ==========================================
+    // HARD REFRESH / SYNC PORTAL (PWA CACHE BUSTER)
+    // ==========================================
+    async function hardRefreshPortal() {
+      const icon = document.getElementById("refresh-portal-icon");
+      if (icon) icon.classList.add("animate-spin", "text-blue-500");
+      showToast("Menyinkronkan modul terbaru...", "fa-arrows-rotate fa-spin text-blue-400");
+
+      try {
+        // Hapus cache Service Worker agar menarik versi terbaru dari server
+        if ("caches" in window) {
+          const cacheNames = await caches.keys();
+          await Promise.all(cacheNames.map(name => caches.delete(name)));
+        }
+        if ("serviceWorker" in navigator) {
+          const registrations = await navigator.serviceWorker.getRegistrations();
+          for (const reg of registrations) {
+            await reg.update();
+          }
+        }
+      } catch (e) {}
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 450);
+    }
 
     // ==========================================
     // VIEW MODE
